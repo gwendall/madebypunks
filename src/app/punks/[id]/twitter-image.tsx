@@ -1,5 +1,5 @@
 import { generateOGImage, generateNotFoundImage } from "@/lib/og-image";
-import { getPunkById } from "@/data/projects";
+import { getPunkById } from "@/data/punks";
 
 export const runtime = "nodejs";
 

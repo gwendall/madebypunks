@@ -2,52 +2,100 @@
 
 A community-curated directory of projects, tools, and art inspired by CryptoPunks. Celebrating builders who keep the punk spirit alive.
 
-## Features
+## Project Structure
 
-- Browse projects by punk ID
-- Individual punk profile pages
-- Pixel art aesthetic with CryptoPunks colors
-- SEO optimized with dynamic Open Graph images
-- Dark mode support
+This project uses a **content-driven architecture** where all punk and project data is stored in markdown files with YAML frontmatter. This makes it easy for anyone to contribute by simply adding or editing markdown files.
+
+```
+madebypunks/
+├── content/
+│   └── punks/
+│       └── [punkId]/           # Folder for each punk (e.g., 2113/)
+│           ├── index.md        # Punk metadata
+│           └── [project].md    # One file per project
+├── src/
+│   ├── app/                    # Next.js pages
+│   ├── components/             # React components
+│   ├── data/
+│   │   └── punks.ts            # Data loading utility
+│   ├── lib/                    # Utilities
+│   └── types/                  # TypeScript types
+└── public/                     # Static assets
+```
 
 ## Add Your Project
 
 Building something with Punks? Add it to the directory:
 
-1. Fork this repository
-2. Edit `src/data/projects.ts`
-3. Find or add the punk ID associated with your project
-4. Add your project following the structure below
-5. Submit a PR!
+### 1. Create Your Punk Folder
 
-### Project Structure
+Create a folder in `content/punks/` with your punk ID:
 
-```typescript
-{
-  id: "my-project",           // Unique identifier (kebab-case)
-  name: "My Project",         // Project name
-  description: "...",         // Short description (max 200 chars)
-  thumbnail: "/images/...",   // Project thumbnail
-  url: "https://...",         // Project website
-  launchDate: "2024-01-15",   // ISO date (YYYY-MM-DD)
-  tags: ["Tool", "Art"],      // Relevant tags
-  twitter: "myproject",       // (optional) Twitter handle
-  github: "https://...",      // (optional) GitHub repo URL
-  discord: "https://...",     // (optional) Discord invite URL
-}
+```
+content/punks/1234/
 ```
 
-### Punk Structure
+### 2. Add Punk Metadata
 
-```typescript
-{
-  id: 1234,                   // Punk ID
-  name: "YourName",           // (optional) Display name
-  twitter: "yourhandle",      // (optional) Twitter handle
-  website: "https://...",     // (optional) Personal website
-  projects: [...]             // Array of projects
-}
+Create an `index.md` file with your punk's info:
+
+```md
+---
+name: Your Name
+twitter: your_twitter_handle
+website: https://your-website.com
+---
 ```
+
+#### Punk Frontmatter Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | No | Display name for the punk owner |
+| `twitter` | No | Twitter/X handle (without @) |
+| `website` | No | Personal website URL |
+
+### 3. Add Your Projects
+
+Create a markdown file for each project (e.g., `my-project.md`):
+
+```md
+---
+name: My Project
+description: A brief description of what the project does.
+thumbnail: https://example.com/logo.png
+url: https://my-project.com
+launchDate: 2024-01-15
+tags:
+  - Tool
+  - Art
+  - Community
+twitter: project_twitter
+github: https://github.com/user/repo
+discord: https://discord.gg/invite
+---
+
+Optional longer description in markdown.
+```
+
+#### Project Frontmatter Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Project name |
+| `description` | Yes | Short description (1-2 sentences) |
+| `url` | Yes | Project URL |
+| `launchDate` | Yes | Launch date in YYYY-MM-DD format |
+| `tags` | Yes | Array of tags (e.g., Tool, Art, Community) |
+| `thumbnail` | No | URL to project logo/thumbnail |
+| `twitter` | No | Project's Twitter/X handle |
+| `github` | No | GitHub repository URL |
+| `discord` | No | Discord invite URL |
+| `hidden` | No | Set to `true` to hide from listings |
+
+### 4. Submit a PR
+
+Fork this repository, add your files, and submit a pull request!
 
 ## Development
 
@@ -60,9 +108,6 @@ npm run dev
 
 # Build for production
 npm run build
-
-# Start production server
-npm start
 ```
 
 ## Tech Stack
@@ -70,6 +115,7 @@ npm start
 - [Next.js 16](https://nextjs.org/) - React framework
 - [TypeScript](https://www.typescriptlang.org/) - Type safety
 - [Tailwind CSS v4](https://tailwindcss.com/) - Styling
+- [gray-matter](https://github.com/jonschlinkert/gray-matter) - YAML frontmatter parsing
 - Dynamic OG images with `next/og`
 
 ## Colors

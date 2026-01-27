@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Header, Footer, PunkAvatar, ProjectCard } from "@/components";
-import { getPunkById, getAllPunks } from "@/data/projects";
+import { getPunkById, getAllPunks } from "@/data/punks";
 
 interface PunkPageProps {
   params: Promise<{ id: string }>;

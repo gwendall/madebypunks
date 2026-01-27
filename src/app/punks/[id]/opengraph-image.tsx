@@ -1,4 +1,5 @@
-import { ImageResponse } from "next/og";
+import { generateOGImage, generateNotFoundImage } from "@/lib/og-image";
+import { getPunkById } from "@/data/punks";
 
 export const runtime = "nodejs";
 
@@ -15,25 +16,22 @@ export default async function Image({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const punkId = parseInt(id, 10);
+  const punk = getPunkById(punkId);
 
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          height: "100%",
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#638696",
-          color: "white",
-          fontSize: 72,
-          fontWeight: 900,
-        }}
-      >
-        Punk #{id}
-      </div>
-    ),
+  if (!punk) {
+    return generateNotFoundImage(size);
+  }
+
+  const name = punk.name || `Punk #${punkId}`;
+
+  return generateOGImage(
+    {
+      title: name,
+      punkId,
+      projectCount: punk.projects.length,
+      twitter: punk.twitter,
+    },
     size
   );
 }

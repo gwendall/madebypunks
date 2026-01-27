@@ -1,11 +1,11 @@
 import { Header, Footer, PunkSection } from "@/components";
-import { punksData, getAllPunks, getAllTags } from "@/data/projects";
+import PUNKS, { getAllPunks, getAllTags } from "@/data/punks";
 import { GITHUB_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
 
 export default function HomePage() {
   const punkIds = getAllPunks();
   const allTags = getAllTags();
-  const totalProjects = Object.values(punksData).reduce(
+  const totalProjects = PUNKS.reduce(
     (acc, punk) => acc + punk.projects.length,
     0
   );
@@ -59,8 +59,8 @@ export default function HomePage() {
 
         {/* Projects by Punk */}
         <div className="mx-auto max-w-7xl divide-y-4 divide-foreground px-4 sm:px-6 lg:px-8">
-          {punkIds.map((punkId) => (
-            <PunkSection key={punkId} punk={punksData[punkId]} />
+          {PUNKS.map((punk) => (
+            <PunkSection key={punk.id} punk={punk} />
           ))}
         </div>
 

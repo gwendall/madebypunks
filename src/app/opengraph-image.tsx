@@ -1,5 +1,5 @@
 import { generateOGImage } from "@/lib/og-image";
-import { getAllPunks } from "@/data/projects";
+import { getAllPunks } from "@/data/punks";
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
 
 export const runtime = "nodejs";
