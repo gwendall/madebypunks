@@ -3,7 +3,7 @@ import { generateOGImage } from "@/lib/og-image";
 import { getPunkById } from "@/data/projects";
 import { COLORS } from "@/lib/constants";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export const alt = "Made by Punks";
 export const size = {

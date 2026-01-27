@@ -2,7 +2,7 @@ import { generateOGImage } from "@/lib/og-image";
 import { getAllPunks } from "@/data/projects";
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export const alt = "Made by Punks - CryptoPunks Project Directory";
 export const size = {
