@@ -19,6 +19,31 @@ function getPunkImageUrl(punkId: number) {
   return `https://punks.art/api/punks/${punkId}?format=png&size=240&background=v2`;
 }
 
+export function generateNotFoundImage(options: OGImageOptions): ImageResponse {
+  const { width, height } = options;
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: COLORS.punkBlue,
+          color: "white",
+          fontSize: 64,
+          fontWeight: 900,
+          textTransform: "uppercase",
+        }}
+      >
+        Punk Not Found
+      </div>
+    ),
+    { width, height }
+  );
+}
+
 export async function generateOGImage(
   props: OGImageProps,
   options: OGImageOptions
