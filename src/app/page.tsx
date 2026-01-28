@@ -62,12 +62,13 @@ export default function HomePage() {
         </section>
 
         {/* Projects by Creator Groups */}
-        <div className="mx-auto max-w-7xl divide-y-2 divide-foreground/20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-neutral-900">
-          {projectGroups.map((group) => (
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 bg-white dark:bg-neutral-900">
+          {projectGroups.map((group, index) => (
             <PunkSection
               key={group.key}
               punks={group.punks}
               projects={group.projects}
+              isFirst={index === 0}
             />
           ))}
         </div>

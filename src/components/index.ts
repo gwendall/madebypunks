@@ -4,5 +4,6 @@ export { PunkAvatar } from "./PunkAvatar";
 export { PunkBadge } from "./PunkBadge";
 export { PunkSection } from "./PunkSection";
 export { ProjectCard } from "./ProjectCard";
+export { ProjectListItem } from "./ProjectListItem";
 export { ProjectThumbnail } from "./ProjectThumbnail";
 export { Button } from "./Button";

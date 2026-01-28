@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Markdown from "react-markdown";
-import { Header, Footer, PunkAvatar, ProjectCard, Button } from "@/components";
+import { Header, Footer, PunkAvatar, ProjectListItem, Button } from "@/components";
 import { getPunkById, getAllPunks, getProjectsByPunk, getProjectCreators } from "@/data/punks";
 
 interface PunkPageProps {
@@ -136,21 +136,22 @@ export default async function PunkPage({ params }: PunkPageProps) {
           </section>
         )}
 
-        {/* Projects Grid */}
-        <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <h2 className="mb-8 text-xl font-bold uppercase tracking-wider">
+        {/* Projects List */}
+        <section className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+          <h2 className="mb-6 text-xl font-bold uppercase tracking-wider">
             Projects featuring Punk #{punkId}
           </h2>
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div>
             {projects.map((project) => {
               const collaborators = getProjectCreators(project).filter(
                 (p) => p.id !== punkId
               );
               return (
-                <ProjectCard
+                <ProjectListItem
                   key={project.id}
                   project={project}
                   collaborators={collaborators}
+                  size="default"
                 />
               );
             })}
