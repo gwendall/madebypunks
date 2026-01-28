@@ -12,15 +12,12 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="flex items-center gap-4">
-          <Link
-            href="/"
-            className="text-sm font-bold uppercase tracking-wider transition-colors hover:text-punk-blue"
-          >
-            Projects
-          </Link>
-          <Button href="/add" variant="primary" size="sm">
+        <nav className="flex items-center">
+          <Button href="/add" variant="primary" size="sm" className="hidden sm:inline-flex">
             + Add Project
+          </Button>
+          <Button href="/add" variant="primary" size="sm" className="sm:hidden w-9 h-9 p-0 justify-center">
+            +
           </Button>
         </nav>
       </div>

@@ -43,9 +43,9 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Tags */}
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-2 max-w-3xl mx-auto">
-              {allTags.map((tag, i) => (
+            {/* Tags - show top 8 */}
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto">
+              {allTags.slice(0, 8).map((tag, i) => (
                 <span
                   key={tag}
                   className={`pixel-tag cursor-default hover:-translate-y-0.5 transition-transform ${
