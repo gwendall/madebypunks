@@ -11,6 +11,7 @@ links:
   - https://x.com/doyle126
 creators:
   - 5671
+thumbnail: /projects/punks-provenance-explorer.jpg
 ---
 
 Punk Provenance Explorer is a visualization tool that tracks and displays the complete ownership history of each CryptoPunk, showing how they've moved between wallets over time.

@@ -11,8 +11,9 @@ links:
   - https://x.com/doyle126
 creators:
   - 5671
+thumbnail: /projects/punkverse.jpg
 ---
-
+ 
 PunkVerse visualizes the interconnected universe of CryptoPunk collectors, showing how punks flow between wallets through sales and transfers. It reveals the hidden network of relationships in the punk ecosystem.
 
 ## Features
