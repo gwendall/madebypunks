@@ -93,7 +93,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 <h1 className="font-pixel-custom text-3xl uppercase tracking-wider text-white sm:text-4xl drop-shadow-[2px_2px_0_rgba(0,0,0,0.3)]">
                   {project.name}
                 </h1>
-                <p className="mt-4 text-lg text-white/80 leading-relaxed">
+                <p className="mt-2 text-lg text-white/80 leading-relaxed">
                   {project.description}
                 </p>
 
@@ -106,7 +106,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                     size="md"
                     className="text-punk-blue"
                   >
-                    Visit Project →
+                    View →
                   </Button>
 
                   {project.twitter && (
@@ -150,22 +150,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                       Discord
                     </Button>
                   )}
-                </div>
-
-                {/* Tags */}
-                <div className="mt-8 flex flex-wrap gap-2">
-                  {project.tags.map((tag, i) => (
-                    <span
-                      key={tag}
-                      className={`pixel-tag ${
-                        i % 2 === 0
-                          ? "bg-white text-punk-blue"
-                          : "bg-punk-pink text-white"
-                      }`}
-                    >
-                      {tag}
-                    </span>
-                  ))}
                 </div>
 
                 {/* Meta */}

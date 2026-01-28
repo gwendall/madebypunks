@@ -27,7 +27,7 @@ export default function AddPage() {
 
       <main className="flex-1">
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="prose prose-lg max-w-none">
+          <div className="prose prose-lg max-w-none prose-headings:text-punk-blue prose-h1:text-punk-pink prose-h2:text-punk-blue prose-a:text-punk-pink prose-a:no-underline hover:prose-a:underline prose-strong:text-punk-blue prose-hr:border-punk-blue/20">
             <Markdown>{content}</Markdown>
           </div>
         </div>

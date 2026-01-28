@@ -109,7 +109,7 @@ export default async function PunkPage({ params }: PunkPageProps) {
                       variant="secondary"
                       size="sm"
                     >
-                      Website
+                      {new URL(punk.website).hostname.replace("www.", "")}
                     </Button>
                   )}
                 </div>
