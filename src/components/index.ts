@@ -1,6 +1,7 @@
 export { Header } from "./Header";
 export { Footer } from "./Footer";
 export { PunkAvatar } from "./PunkAvatar";
+export { PunkBadge } from "./PunkBadge";
 export { PunkSection } from "./PunkSection";
 export { ProjectCard } from "./ProjectCard";
 export { ProjectThumbnail } from "./ProjectThumbnail";

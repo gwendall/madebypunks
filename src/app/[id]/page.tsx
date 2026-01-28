@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Markdown from "react-markdown";
 import { Header, Footer, PunkAvatar, ProjectCard, Button } from "@/components";
-import { getPunkById, getAllPunks, getProjectsByPunk } from "@/data/punks";
+import { getPunkById, getAllPunks, getProjectsByPunk, getProjectCreators } from "@/data/punks";
 
 interface PunkPageProps {
   params: Promise<{ id: string }>;
@@ -142,9 +142,18 @@ export default async function PunkPage({ params }: PunkPageProps) {
             Projects featuring Punk #{punkId}
           </h2>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
+            {projects.map((project) => {
+              const collaborators = getProjectCreators(project).filter(
+                (p) => p.id !== punkId
+              );
+              return (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  collaborators={collaborators}
+                />
+              );
+            })}
           </div>
         </section>
       </main>

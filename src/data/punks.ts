@@ -175,3 +175,41 @@ export function getAllPunkParams() {
     id: String(punk.id),
   }));
 }
+
+/**
+ * Group projects by their creator sets.
+ * Projects with the same creators are grouped together.
+ * Returns groups sorted by most projects first.
+ */
+export interface CreatorGroup {
+  key: string;
+  punks: Punk[];
+  projects: Project[];
+}
+
+export function getProjectGroups(): CreatorGroup[] {
+  const groups = new Map<string, { punkIds: number[]; projects: Project[] }>();
+
+  for (const project of PROJECTS) {
+    // Create a unique key from sorted creator IDs
+    const sortedIds = [...project.creators].sort((a, b) => a - b);
+    const key = sortedIds.join("-");
+
+    if (!groups.has(key)) {
+      groups.set(key, { punkIds: sortedIds, projects: [] });
+    }
+    groups.get(key)!.projects.push(project);
+  }
+
+  // Convert to array and resolve punk objects
+  return Array.from(groups.entries())
+    .map(([key, { punkIds, projects }]) => ({
+      key,
+      punks: punkIds
+        .map((id) => PUNKS_MAP.get(id))
+        .filter((punk): punk is Punk => punk !== undefined),
+      projects,
+    }))
+    .filter((group) => group.punks.length > 0)
+    .sort((a, b) => b.projects.length - a.projects.length);
+}

@@ -1,12 +1,12 @@
-import Link from "next/link";
 import { Header, Footer, PunkSection, Button } from "@/components";
-import PUNKS, { getAllPunks, getAllTags, PROJECTS, getProjectsByPunk } from "@/data/punks";
+import { getAllPunks, getAllTags, PROJECTS, getProjectGroups } from "@/data/punks";
 import { SITE_NAME, SITE_TAGLINE } from "@/lib/constants";
 
 export default function HomePage() {
   const punkIds = getAllPunks();
   const allTags = getAllTags();
   const totalProjects = PROJECTS.length;
+  const projectGroups = getProjectGroups();
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -23,7 +23,7 @@ export default function HomePage() {
             <p className="mx-auto mt-4 text-lg font-medium text-white/90 font-mono">
               {SITE_TAGLINE}
             </p>
-            
+
             <div className="mt-8 flex items-center justify-center gap-6">
               <div className="pixel-shadow bg-punk-blue-light px-5 py-2 transform hover:-translate-y-1 transition-transform">
                 <span className="text-2xl font-bold text-white">
@@ -49,8 +49,8 @@ export default function HomePage() {
                 <span
                   key={tag}
                   className={`pixel-tag cursor-default hover:-translate-y-0.5 transition-transform ${
-                    i % 2 === 0 
-                      ? "bg-punk-blue-light text-white" 
+                    i % 2 === 0
+                      ? "bg-punk-blue-light text-white"
                       : "bg-punk-pink text-white"
                   }`}
                 >
@@ -61,13 +61,15 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Projects by Punk */}
+        {/* Projects by Creator Groups */}
         <div className="mx-auto max-w-7xl divide-y-2 divide-foreground/20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-neutral-900">
-          {PUNKS.map((punk) => {
-            const projects = getProjectsByPunk(punk.id);
-            if (projects.length === 0) return null;
-            return <PunkSection key={punk.id} punk={punk} projects={projects} />;
-          })}
+          {projectGroups.map((group) => (
+            <PunkSection
+              key={group.key}
+              punks={group.punks}
+              projects={group.projects}
+            />
+          ))}
         </div>
 
         {/* CTA Section */}

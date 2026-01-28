@@ -1,46 +1,26 @@
-import Link from "next/link";
 import { Punk, Project } from "@/types";
-import { PunkAvatar } from "./PunkAvatar";
+import { PunkBadge } from "./PunkBadge";
 import { ProjectCard } from "./ProjectCard";
 
 interface PunkSectionProps {
-  punk: Punk;
+  punks: Punk[];
   projects: Project[];
 }
 
-export function PunkSection({ punk, projects }: PunkSectionProps) {
+export function PunkSection({ punks, projects }: PunkSectionProps) {
   return (
     <section className="py-8">
       {/* Punk Header */}
-      <div className="mb-6 flex items-center gap-4">
-        <Link href={`/${punk.id}`} className="group relative">
-          <PunkAvatar
-            punkId={punk.id}
-            size={56}
-            className="transition-all group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] group-hover:shadow-[4px_4px_0_0_var(--shadow-color)]"
-          />
-        </Link>
-        <div>
-          <Link href={`/${punk.id}`} className="group flex items-baseline gap-3">
-            <h2 className="text-xl font-bold uppercase tracking-wider group-hover:text-punk-pink transition-colors">
-              {punk.name || `Punk #${punk.id}`}
-            </h2>
-            <span className="text-base font-medium opacity-60 group-hover:text-punk-blue group-hover:opacity-100 transition-all">
-              #{punk.id}
-            </span>
-          </Link>
-          <div className="flex items-center gap-3 text-base font-medium opacity-60 mt-1">
-            {punk.twitter && (
-              <a
-                href={`https://x.com/${punk.twitter}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-punk-pink hover:opacity-100 transition-colors"
-              >
-                @{punk.twitter}
-              </a>
-            )}
-          </div>
+      <div className="mb-6 flex items-center gap-4 flex-wrap">
+        <div className="flex items-center gap-4 flex-wrap">
+          {punks.map((punk, i) => (
+            <div key={punk.id} className="flex items-center gap-4">
+              {i > 0 && (
+                <span className="text-2xl font-bold opacity-30">+</span>
+              )}
+              <PunkBadge punk={punk} size="lg" showTwitter />
+            </div>
+          ))}
         </div>
         <div className="ml-auto">
           <span className="pixel-tag bg-neutral-100 text-neutral-500">

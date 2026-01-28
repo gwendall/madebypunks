@@ -1,15 +1,18 @@
 import Link from "next/link";
-import { Project } from "@/types";
+import { Project, Punk } from "@/types";
 import { ProjectThumbnail } from "./ProjectThumbnail";
+import { PunkAvatar } from "./PunkAvatar";
 import { XIcon, GitHubIcon, DiscordIcon } from "./icons";
 
 interface ProjectCardProps {
   project: Project;
+  collaborators?: Punk[]; // Other creators to show as "with X"
   showPunk?: boolean;
 }
 
 export function ProjectCard({
   project,
+  collaborators,
   showPunk = false,
 }: ProjectCardProps) {
   const formattedDate = new Date(project.launchDate).toLocaleDateString(
@@ -52,6 +55,25 @@ export function ProjectCard({
             {formattedDate}
           </time>
         </div>
+
+        {/* Collaborators */}
+        {collaborators && collaborators.length > 0 && (
+          <div className="mb-2 flex items-center gap-2 text-sm opacity-70">
+            <span>with</span>
+            <div className="flex items-center gap-1.5">
+              {collaborators.map((collab) => (
+                <Link
+                  key={collab.id}
+                  href={`/${collab.id}`}
+                  className="flex items-center gap-1 hover:opacity-100 hover:text-punk-pink transition-all"
+                >
+                  <PunkAvatar punkId={collab.id} size={20} />
+                  <span className="font-medium">{collab.name || `#${collab.id}`}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         <p className="mb-3 flex-1 text-base opacity-80 line-clamp-2 leading-relaxed">
           {project.description}
