@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Project, Punk } from "@/types";
 import { ProjectThumbnail } from "./ProjectThumbnail";
 import { PunkAvatar } from "./PunkAvatar";
@@ -10,6 +13,8 @@ interface ProjectListItemProps {
 }
 
 export function ProjectListItem({ project, collaborators, size = "compact" }: ProjectListItemProps) {
+  const router = useRouter();
+
   const formattedDate = new Date(project.launchDate).toLocaleDateString(
     "en-US",
     {
@@ -19,6 +24,12 @@ export function ProjectListItem({ project, collaborators, size = "compact" }: Pr
   );
 
   const isDefault = size === "default";
+
+  const handleCollaboratorClick = (e: React.MouseEvent, punkId: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(`/${punkId}`);
+  };
 
   return (
     <Link
@@ -51,16 +62,18 @@ export function ProjectListItem({ project, collaborators, size = "compact" }: Pr
 
         {/* Collaborators */}
         {collaborators && collaborators.length > 0 && (
-          <div className="mt-1 flex items-center gap-2 text-sm opacity-70">
-            <span>with</span>
-            <div className="flex items-center gap-1.5">
-              {collaborators.map((collab) => (
-                <span key={collab.id} className="flex items-center gap-1">
-                  <PunkAvatar punkId={collab.id} size={16} />
-                  <span className="font-medium">{collab.name || `#${collab.id}`}</span>
-                </span>
-              ))}
-            </div>
+          <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-sm">
+            <span className="opacity-50">with</span>
+            {collaborators.map((collab) => (
+              <span
+                key={collab.id}
+                onClick={(e) => handleCollaboratorClick(e, collab.id)}
+                className="flex items-center gap-1 whitespace-nowrap bg-foreground/5 px-1.5 py-0.5 hover:bg-foreground/10 transition-colors"
+              >
+                <PunkAvatar punkId={collab.id} size={14} />
+                <span className="opacity-70">{collab.name || `#${collab.id}`}</span>
+              </span>
+            ))}
           </div>
         )}
 

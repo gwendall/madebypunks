@@ -176,9 +176,9 @@ export function getAllPunkParams() {
  * Group projects by their creator sets.
  *
  * Logic:
- * - If a punk has at least one SOLO project (they're the only creator),
- *   they get their own entry with ALL their projects (solo + collab)
- * - Punks who ONLY have collaborative projects are grouped together
+ * - Every punk who has at least one project gets their own entry
+ * - Their entry shows ALL projects they contributed to (solo + collab)
+ * - This means collaborative projects may appear under multiple punk entries
  *
  * Returns groups sorted by featured first, then by most projects.
  */
@@ -189,60 +189,38 @@ export interface CreatorGroup {
 }
 
 export function getProjectGroups(): CreatorGroup[] {
-  // Step 1: Identify punks who have at least one solo project
-  const punksWithSoloProjects = new Set<number>();
+  // Get all punks who have at least one project
+  const punksWithProjects = new Set<number>();
   for (const project of PROJECTS) {
-    if (project.creators.length === 1) {
-      punksWithSoloProjects.add(project.creators[0]);
+    for (const creatorId of project.creators) {
+      punksWithProjects.add(creatorId);
     }
   }
 
-  // Step 2: Build groups
-  const groups = new Map<string, { punkIds: number[]; projects: Project[] }>();
-  const processedProjects = new Set<string>();
+  // Create an entry for each punk with their projects
+  const groups: CreatorGroup[] = [];
 
-  // First, create individual entries for punks with solo projects
-  for (const punkId of punksWithSoloProjects) {
+  for (const punkId of punksWithProjects) {
+    const punk = PUNKS_MAP.get(punkId);
+    if (!punk) continue;
+
     const punkProjects = PROJECTS.filter((p) => p.creators.includes(punkId));
-    const key = String(punkId);
 
-    groups.set(key, { punkIds: [punkId], projects: punkProjects });
-
-    // Mark these projects as processed
-    punkProjects.forEach((p) => processedProjects.add(p.id));
-  }
-
-  // Then, group remaining projects (where NO creator has solo projects)
-  for (const project of PROJECTS) {
-    if (processedProjects.has(project.id)) continue;
-
-    // All creators of this project have no solo projects, group them together
-    const sortedIds = [...project.creators].sort((a, b) => a - b);
-    const key = sortedIds.join("-");
-
-    if (!groups.has(key)) {
-      groups.set(key, { punkIds: sortedIds, projects: [] });
-    }
-    groups.get(key)!.projects.push(project);
-  }
-
-  // Convert to array and resolve punk objects
-  return Array.from(groups.entries())
-    .map(([key, { punkIds, projects }]) => ({
-      key,
-      punks: punkIds
-        .map((id) => PUNKS_MAP.get(id))
-        .filter((punk): punk is Punk => punk !== undefined),
-      projects,
-    }))
-    .filter((group) => group.punks.length > 0)
-    .sort((a, b) => {
-      // Featured groups first (any project in the group is featured)
-      const aFeatured = a.projects.some((p) => p.featured);
-      const bFeatured = b.projects.some((p) => p.featured);
-      if (aFeatured && !bFeatured) return -1;
-      if (!aFeatured && bFeatured) return 1;
-      // Then by number of projects
-      return b.projects.length - a.projects.length;
+    groups.push({
+      key: String(punkId),
+      punks: [punk],
+      projects: punkProjects,
     });
+  }
+
+  // Sort: featured first, then by number of projects
+  return groups.sort((a, b) => {
+    // Featured groups first (any project in the group is featured)
+    const aFeatured = a.projects.some((p) => p.featured);
+    const bFeatured = b.projects.some((p) => p.featured);
+    if (aFeatured && !bFeatured) return -1;
+    if (!aFeatured && bFeatured) return 1;
+    // Then by number of projects
+    return b.projects.length - a.projects.length;
+  });
 }
