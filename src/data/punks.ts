@@ -188,6 +188,44 @@ export interface CreatorGroup {
   projects: Project[];
 }
 
+/**
+ * Get search data for client-side search
+ */
+export interface SearchItem {
+  type: "punk" | "project";
+  id: string | number;
+  name: string;
+  slug: string;
+  punkId?: number;
+}
+
+export function getSearchData(): SearchItem[] {
+  const items: SearchItem[] = [];
+
+  // Add punks
+  for (const punk of PUNKS) {
+    items.push({
+      type: "punk",
+      id: punk.id,
+      name: punk.name || `Punk #${punk.id}`,
+      slug: `/${punk.id}`,
+      punkId: punk.id,
+    });
+  }
+
+  // Add projects
+  for (const project of PROJECTS) {
+    items.push({
+      type: "project",
+      id: project.id,
+      name: project.name,
+      slug: `/p/${project.id}`,
+    });
+  }
+
+  return items;
+}
+
 export function getProjectGroups(): CreatorGroup[] {
   // Get all punks who have at least one project
   const punksWithProjects = new Set<number>();

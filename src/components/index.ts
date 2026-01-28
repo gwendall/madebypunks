@@ -10,3 +10,4 @@ export { Button } from "./Button";
 export { LinksList } from "./LinksList";
 export { AIAssistButtons } from "./AIAssistButtons";
 export { BackButton } from "./BackButton";
+export { SearchOverlay } from "./SearchOverlay";
