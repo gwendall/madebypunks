@@ -9,6 +9,7 @@ tags:
   - Explorer
   - Official
 twitter: cryptopunks
+featured: true
 creators:
   - 8070
   - 5072

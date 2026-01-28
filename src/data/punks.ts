@@ -30,6 +30,7 @@ interface ProjectFrontmatter {
   discord?: string;
   hidden?: boolean;
   ded?: boolean;
+  featured?: boolean;
   creators: number[];
 }
 
@@ -106,6 +107,7 @@ function loadAllProjects(): Project[] {
         github: projectData.github,
         discord: projectData.discord,
         ded: projectData.ded,
+        featured: projectData.featured,
         creators: projectData.creators || [],
       } as Project;
     })
@@ -211,5 +213,13 @@ export function getProjectGroups(): CreatorGroup[] {
       projects,
     }))
     .filter((group) => group.punks.length > 0)
-    .sort((a, b) => b.projects.length - a.projects.length);
+    .sort((a, b) => {
+      // Featured groups first (any project in the group is featured)
+      const aFeatured = a.projects.some((p) => p.featured);
+      const bFeatured = b.projects.some((p) => p.featured);
+      if (aFeatured && !bFeatured) return -1;
+      if (!aFeatured && bFeatured) return 1;
+      // Then by number of projects
+      return b.projects.length - a.projects.length;
+    });
 }

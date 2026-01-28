@@ -11,6 +11,7 @@ export interface Project {
   github?: string;
   discord?: string;
   ded?: boolean; // Project is dead/discontinued
+  featured?: boolean; // Featured projects appear first
   creators: number[]; // Punk IDs who built this project
 }
 
