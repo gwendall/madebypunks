@@ -49,13 +49,13 @@ export function ProjectCard({
           </h3>
           <time
             dateTime={project.launchDate}
-            className="shrink-0 text-sm font-medium opacity-60 font-mono mt-1"
+            className="shrink-0 text-base font-medium opacity-60 font-mono mt-1"
           >
             {formattedDate}
           </time>
         </div>
 
-        <p className="mb-3 flex-1 text-sm opacity-80 line-clamp-2 leading-relaxed">
+        <p className="mb-3 flex-1 text-base opacity-80 line-clamp-2 leading-relaxed">
           {project.description}
         </p>
 
@@ -81,7 +81,7 @@ export function ProjectCard({
           {showPunk && (
             <Link
               href={`/${punkId}`}
-              className="text-xs font-bold uppercase tracking-wider hover:text-punk-blue"
+              className="text-base font-bold uppercase tracking-wider hover:text-punk-blue"
             >
               #{punkId}
             </Link>

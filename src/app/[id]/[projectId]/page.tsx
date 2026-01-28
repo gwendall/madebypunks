@@ -70,7 +70,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
             <Link
               href={`/${punkId}`}
-              className="mb-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-white/80 transition-colors hover:text-white"
+              className="mb-6 inline-flex items-center gap-2 text-base font-bold uppercase tracking-wider text-white/80 transition-colors hover:text-white"
             >
               ← Back to Punk #{punkId}
             </Link>
@@ -166,7 +166,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </div>
 
                 {/* Meta */}
-                <div className="mt-8 flex items-center gap-6 text-sm text-white/60 font-mono">
+                  <div className="mt-8 flex items-center gap-6 text-base text-white/60 font-mono">
                   <span>Launched {formattedDate}</span>
                   <Link
                     href={`/${punkId}`}

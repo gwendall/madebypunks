@@ -24,9 +24,9 @@ export function Button({
 
   // Size styles
   const sizeStyles = {
-    sm: "text-xs px-4 py-2",
-    md: "text-sm px-6 py-3",
-    lg: "text-base px-8 py-4",
+    sm: "text-base px-4 py-2", // Minimum MD size
+    md: "text-lg px-6 py-3", // Bumped up
+    lg: "text-xl px-8 py-4", // Bumped up
   };
 
   // Variant styles

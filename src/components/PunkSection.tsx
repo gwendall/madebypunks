@@ -16,7 +16,7 @@ export function PunkSection({ punk }: PunkSectionProps) {
           <PunkAvatar
             punkId={punk.id}
             size={56}
-            className="transition-all group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] group-hover:shadow-[4px_4px_0_0_var(--foreground)]"
+            className="transition-all group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] group-hover:shadow-[4px_4px_0_0_var(--shadow-color)]"
           />
         </Link>
         <div>
@@ -24,11 +24,11 @@ export function PunkSection({ punk }: PunkSectionProps) {
             <h2 className="text-xl font-bold uppercase tracking-wider group-hover:text-punk-pink transition-colors">
               {punk.name || `Punk #${punk.id}`}
             </h2>
-            <span className="text-sm font-medium opacity-60 group-hover:text-punk-blue group-hover:opacity-100 transition-all">
+            <span className="text-base font-medium opacity-60 group-hover:text-punk-blue group-hover:opacity-100 transition-all">
               #{punk.id}
             </span>
           </Link>
-          <div className="flex items-center gap-3 text-sm font-medium opacity-60 mt-1">
+          <div className="flex items-center gap-3 text-base font-medium opacity-60 mt-1">
             {punk.twitter && (
               <a
                 href={`https://x.com/${punk.twitter}`}

@@ -66,7 +66,7 @@ export default async function PunkPage({ params }: PunkPageProps) {
           <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
             <Link
               href="/"
-              className="mb-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-white/80 transition-colors hover:text-white"
+              className="mb-6 inline-flex items-center gap-2 text-base font-bold uppercase tracking-wider text-white/80 transition-colors hover:text-white"
             >
               ← Back
             </Link>
@@ -113,11 +113,11 @@ export default async function PunkPage({ params }: PunkPageProps) {
                 </div>
               </div>
 
-              <div className="bg-white/10 px-6 py-4 text-center backdrop-blur-sm rounded-lg">
+              <div className="bg-white/10 px-6 py-4 text-center backdrop-blur-sm">
                 <div className="text-4xl font-bold text-white">
                   {punk.projects.length}
                 </div>
-                <div className="text-xs font-bold uppercase tracking-wider text-white/80 font-pixel">
+                <div className="text-base font-bold uppercase tracking-wider text-white/80 font-pixel">
                   Project{punk.projects.length !== 1 ? "s" : ""}
                 </div>
               </div>

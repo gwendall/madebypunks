@@ -20,7 +20,7 @@ export function PunkAvatar({
 
   return (
     <div
-      className={`relative overflow-hidden border-2 border-foreground bg-punk-blue ${className}`}
+      className={`relative overflow-hidden bg-punk-blue-light ${className}`}
       style={{ width: size, height: size }}
     >
       <Image

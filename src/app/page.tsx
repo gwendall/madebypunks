@@ -26,7 +26,7 @@ export default function HomePage() {
             <p className="mx-auto mt-4 text-lg font-medium text-white/90 font-mono">
               {SITE_TAGLINE}
             </p>
-            <p className="mx-auto mt-2 max-w-xl text-sm text-white/70">
+            <p className="mx-auto mt-2 max-w-xl text-base text-white/70">
               No database. No backend. No gatekeepers. Just git.
             </p>
             
@@ -35,7 +35,7 @@ export default function HomePage() {
                 <span className="text-2xl font-bold text-white">
                   {punkIds.length}
                 </span>
-                <span className="ml-2 text-xs font-bold uppercase tracking-wider text-white font-pixel">
+                <span className="ml-2 text-sm font-bold uppercase tracking-wider text-white font-pixel">
                   Punks
                 </span>
               </div>
@@ -43,7 +43,7 @@ export default function HomePage() {
                 <span className="text-2xl font-bold text-white">
                   {totalProjects}
                 </span>
-                <span className="ml-2 text-xs font-bold uppercase tracking-wider text-white font-pixel">
+                <span className="ml-2 text-sm font-bold uppercase tracking-wider text-white font-pixel">
                   Projects
                 </span>
               </div>
@@ -80,7 +80,7 @@ export default function HomePage() {
             <h2 className="text-xl font-bold uppercase tracking-wider text-white drop-shadow-[2px_2px_0_rgba(0,0,0,0.2)]">
               Building something with Punks?
             </h2>
-            <p className="mt-3 text-white/90 text-sm max-w-lg mx-auto">
+            <p className="mt-3 text-white/90 text-base max-w-lg mx-auto">
               This directory belongs to the community. Add your project via PR.
             </p>
             <Button href="/add" variant="white" size="sm" className="mt-6 text-punk-pink">

@@ -9,7 +9,7 @@
   /* Light mode */
   --background: #ffffff;
   --foreground: #171717;
-  --card-background: #f5f5f5;
+  --card-background: #ffffff; /* Same as background for clean look */
   --border-color: #171717;
   --shadow-color: #a0a0a0;
 }
@@ -28,9 +28,9 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #111111; /* Slightly darker main background */
     --foreground: #ededed;
-    --card-background: #171717;
+    --card-background: #222222; /* Even Lighter card background (was #1a1a1a) */
     --border-color: #ededed;
     --shadow-color: #4a4a4a;
   }
@@ -132,7 +132,7 @@ html {
   font-family: var(--font-pixel);
   font-weight: 400;
   text-transform: uppercase;
-  font-size: 0.75rem; /* Bigger than before */
+  font-size: 1rem; /* text-base (MD), replacing 0.875rem */
   letter-spacing: 0.05em;
   padding: 0.35rem 0.75rem;
   border-radius: 0; /* Keep it square */
