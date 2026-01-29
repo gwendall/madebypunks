@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyWebhookSignature, reviewPR } from "../lib";
+import { verifyWebhookSignature, reviewPR, getPRComments } from "../lib";
+
+const BOT_LOGIN = `${process.env.GITHUB_APP_SLUG || "punkmodbot"}[bot]`;
 
 interface PullRequestEvent {
   action: string;
@@ -80,14 +82,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ event: "issue_comment", skipped: true, reason: "not_created" });
     }
 
-    const commentBody = payload.comment.body.toLowerCase();
-    const mentionsBot = commentBody.includes("@punkmodbot") || commentBody.includes("punkmodbot");
-
-    if (!mentionsBot) {
-      return NextResponse.json({ event: "issue_comment", skipped: true, reason: "not_mentioned" });
+    // Ignore comments from the bot itself (avoid infinite loops)
+    if (payload.comment.user.login === BOT_LOGIN) {
+      return NextResponse.json({ event: "issue_comment", skipped: true, reason: "bot_comment" });
     }
 
     const prNumber = payload.issue.number;
+
+    // Check if bot has already participated in this PR
+    const comments = await getPRComments(prNumber);
+    const botHasCommented = comments.some((c) => c.user.login === BOT_LOGIN);
+
+    // If bot hasn't commented yet, only respond if mentioned
+    if (!botHasCommented) {
+      const commentBody = payload.comment.body.toLowerCase();
+      const mentionsBot = commentBody.includes("@punkmodbot") || commentBody.includes("punkmodbot");
+      if (!mentionsBot) {
+        return NextResponse.json({ event: "issue_comment", skipped: true, reason: "not_participating" });
+      }
+    }
+
     try {
       const result = await reviewPR(prNumber, true); // Force re-review
       return NextResponse.json({ event: "issue_comment", action: "re_review", pr: prNumber, ...result });
