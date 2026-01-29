@@ -550,17 +550,33 @@ export async function getDiscussion(discussionNumber: number): Promise<{
   };
 }
 
-// Post a comment on a discussion
-export async function postDiscussionComment(discussionId: string, body: string): Promise<void> {
-  const mutation = `
-    mutation($discussionId: ID!, $body: String!) {
-      addDiscussionComment(input: { discussionId: $discussionId, body: $body }) {
-        comment { id }
+// Post a comment on a discussion (optionally as a reply to a specific comment)
+export async function postDiscussionComment(
+  discussionId: string,
+  body: string,
+  replyToId?: string
+): Promise<void> {
+  if (replyToId) {
+    // Reply to a specific comment (nested reply)
+    const mutation = `
+      mutation($discussionId: ID!, $replyToId: ID!, $body: String!) {
+        addDiscussionComment(input: { discussionId: $discussionId, replyToId: $replyToId, body: $body }) {
+          comment { id }
+        }
       }
-    }
-  `;
-
-  await githubGraphQL(mutation, { discussionId, body });
+    `;
+    await githubGraphQL(mutation, { discussionId, replyToId, body });
+  } else {
+    // Top-level comment on the discussion
+    const mutation = `
+      mutation($discussionId: ID!, $body: String!) {
+        addDiscussionComment(input: { discussionId: $discussionId, body: $body }) {
+          comment { id }
+        }
+      }
+    `;
+    await githubGraphQL(mutation, { discussionId, body });
+  }
 }
 
 // =============================================================================
@@ -1525,7 +1541,13 @@ export async function handleDiscussion(
     }
   }
 
-  await postDiscussionComment(discussion.id, result.reply);
+  // Determine where to post the reply:
+  // - If there are comments, reply to the last one (nested reply)
+  // - If no comments yet, post as a top-level comment
+  const lastComment = comments.length > 0 ? comments[comments.length - 1] : null;
+  const replyToId = lastComment?.id;
+
+  await postDiscussionComment(discussion.id, result.reply, replyToId);
 
   return {
     replied: true,
