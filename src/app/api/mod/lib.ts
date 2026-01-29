@@ -1012,18 +1012,22 @@ export async function downloadImageAsBase64(imageUrl: string, githubToken?: stri
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-    // Check if this is a GitHub-hosted image that might need auth
-    const isGitHubImage = imageUrl.includes("github.com") || imageUrl.includes("githubusercontent.com");
-    console.log(`[downloadImageAsBase64] Is GitHub image: ${isGitHubImage}, has token: ${!!githubToken}`);
+    // Check what type of GitHub URL this is
+    const isGitHubUserAttachment = imageUrl.includes("github.com/user-attachments/");
+    const isGitHubContent = imageUrl.includes("githubusercontent.com") && !isGitHubUserAttachment;
+    console.log(`[downloadImageAsBase64] URL type - user-attachment: ${isGitHubUserAttachment}, githubusercontent: ${isGitHubContent}`);
 
     const headers: Record<string, string> = {
-      "User-Agent": "Mozilla/5.0 PunkModBot",
+      "User-Agent": "Mozilla/5.0 (compatible; PunkModBot/1.0)",
     };
 
-    // Add GitHub token for GitHub-hosted images
-    if (isGitHubImage && githubToken) {
+    // GitHub user-attachments are PUBLIC - do NOT use auth token (it breaks the request)
+    // Only use token for githubusercontent.com URLs (like raw file content)
+    if (isGitHubContent && githubToken) {
       headers["Authorization"] = `Bearer ${githubToken}`;
-      console.log(`[downloadImageAsBase64] Added GitHub auth header`);
+      console.log(`[downloadImageAsBase64] Added GitHub auth header for githubusercontent`);
+    } else if (isGitHubUserAttachment) {
+      console.log(`[downloadImageAsBase64] User-attachment URL - accessing without auth (public)`);
     }
 
     console.log(`[downloadImageAsBase64] Fetching...`);
