@@ -1,6 +1,6 @@
 ---
 name: Two Bit Punks
-description: A generative art collection of 512 pieces exploring assumptions, minimalism, and the essence of what makes a punk.
+description: A generative art collection of 128 pieces exploring assumptions, minimalism, and the essence of what makes a punk.
 url: https://seanbonner.com/two-bit-punks/
 launchDate: 2024-01-01
 tags:
@@ -13,7 +13,7 @@ creators:
   - 4736
 ---
 
-Two Bit Punks is a generative art collection of 512 pieces by Sean Bonner - an exercise in assumptions, association, aggressive minimalism, and forced constraint.
+Two Bit Punks is a generative art collection of 128 pieces by Sean Bonner - an exercise in assumptions, association, aggressive minimalism, and forced constraint.
 
 ## The Concept
 

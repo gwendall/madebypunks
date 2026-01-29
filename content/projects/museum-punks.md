@@ -2,7 +2,7 @@
 name: Museum Punks
 description: Documenting and exploring CryptoPunks in museum permanent collections around the world.
 url: https://museumpunks.com/
-launchDate: 2024-01-01
+launchDate: 2026-01-01
 tags:
   - History
   - Museums
@@ -24,9 +24,6 @@ CryptoPunks have found their way into some of the world's most prestigious museu
 - **LACMA** - Los Angeles County Museum of Art
 - **ICA Miami** - Institute of Contemporary Art
 
-## The Punks Legacy Project
-
-Launched in November 2022 with its inaugural donation to ICA Miami, this initiative oversees the donation and installation of CryptoPunks in museums' permanent collections, supplemented by education in web3, crypto security, and NFT best practices.
 
 ## Explore
 
