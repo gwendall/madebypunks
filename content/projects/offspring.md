@@ -2,7 +2,7 @@
 name: Offspring
 description: A generative tool that merges two CryptoPunks at the pixel level to create unique offspring.
 url: https://offspring.junkdrawer.wtf/
-launchDate: 2025-01-26
+launchDate: 2026-01-26
 tags:
   - Art
   - Explorer
