@@ -1497,7 +1497,7 @@ If the discussion is spam, off-topic garbage, or you genuinely have nothing usef
 export async function handleDiscussion(
   discussionNumber: number
 ): Promise<{ replied: boolean; reason?: string; prCreated?: boolean; prUrl?: string }> {
-  const { discussion, comments, topLevelComments } = await getDiscussion(discussionNumber);
+  const { discussion, comments } = await getDiscussion(discussionNumber);
 
   const result = await analyzeDiscussion(discussion, comments);
 
@@ -1563,20 +1563,21 @@ export async function handleDiscussion(
   // We can't reply to a reply (3rd level), so we need to find a top-level comment to reply to.
   //
   // Strategy:
-  // 1. If the bot has a top-level comment, reply to that (creates a thread)
-  // 2. Otherwise, if there's any top-level comment, reply to the first one
-  // 3. If no comments at all, post as a new top-level comment
-  const botLogin = `${GITHUB_APP_SLUG}[bot]`;
-  const botTopLevelComment = topLevelComments.find(c => c.author.login === botLogin);
-  const firstTopLevelComment = topLevelComments[0];
+  // 1. Find the last comment in the conversation
+  // 2. If it's a reply (has parentId), reply to its parent (same thread)
+  // 3. If it's a top-level comment, reply to it
+  // 4. If no comments, create a new top-level comment
+  const lastComment = comments.length > 0 ? comments[comments.length - 1] : null;
 
   let replyToId: string | undefined;
-  if (botTopLevelComment) {
-    // Reply to bot's own thread
-    replyToId = botTopLevelComment.id;
-  } else if (firstTopLevelComment) {
-    // Reply to the first comment (start a thread there)
-    replyToId = firstTopLevelComment.id;
+  if (lastComment) {
+    if (lastComment.parentId) {
+      // Last comment is a reply - reply to its parent (same thread)
+      replyToId = lastComment.parentId;
+    } else {
+      // Last comment is top-level - reply to it
+      replyToId = lastComment.id;
+    }
   }
   // else: no replyToId = create a new top-level comment
 
