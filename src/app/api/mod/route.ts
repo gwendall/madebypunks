@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getOpenPRs, reviewPR, BOT_NAME } from "./lib";
+import { getOpenPRs, reviewPR } from "./lib";
 
 // GET /api/mod - Review all open PRs that haven't been reviewed yet
 export async function GET() {
@@ -27,10 +27,5 @@ export async function GET() {
     await new Promise((r) => setTimeout(r, 1000));
   }
 
-  return NextResponse.json({
-    bot: BOT_NAME,
-    reviewed,
-    skipped,
-    total: prs.length,
-  });
+  return NextResponse.json({ reviewed, skipped, total: prs.length });
 }

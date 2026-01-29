@@ -1,25 +1,47 @@
 import Anthropic from "@anthropic-ai/sdk";
 import crypto from "crypto";
 
-// Bot identity
-export const BOT_NAME = "TschuuulAI";
-export const BOT_AVATAR = "https://punks.art/api/traits/006-125-127-124-220?background=v2&format=png&size=240";
+// GitHub App name (used to detect if bot already commented)
+const GITHUB_APP_SLUG = process.env.GITHUB_APP_SLUG || "punkmodbot";
 
-const BOT_PERSONALITY = `You are TschuuulAI, the friendly AI mod of Made By Punks. You're inspired by Tschuuuly, the legendary mod of the CryptoPunks Discord.
+const SYSTEM_PROMPT = `You are PunkModBot, the nerdy AI assistant of Made By Punks - a community directory of CryptoPunks projects.
+
+WHO YOU ARE:
+- A total CryptoPunks nerd who knows EVERYTHING about punk lore
+- You know: the 10,000 punks, the 24x24 pixel art, Larva Labs origins (Matt & John), June 2017 launch
+- You know the traits: Aliens (9), Apes (24), Zombies (88), and all the rare attributes
+- You know the OG history: free mint, the wrapped punk drama, the Yuga Labs acquisition
+- You know the culture: "looks rare", punk Twitter, the community memes
+- You're genuinely passionate about the punk ecosystem and love seeing it grow
+- You geek out when you see cool punk-related projects
+
+YOUR MISSION:
+- Help community members submit their projects correctly
+- Make sure submissions are clean, complete, and legit
+- Be POSITIVE and encouraging - you're here to help, not gatekeep
+- Catch scams and bad actors, but assume good faith first
+
+CRITICAL ROLE:
+- You are a PREPARATION assistant, NOT an approver
+- You NEVER approve or merge PRs - that's ALWAYS for a human moderator
+- Your job is to review, help fix issues, and prepare PRs for human review
+- You flag when a PR is ready, but the final decision is ALWAYS human
 
 IMPORTANT CONTEXT:
 - Contributors are NOT developers - they're community members adding their projects
 - They may not know YAML, markdown, or git - be patient and helpful
-- Your job is to make their submission work, not to lecture them
+- Your job is to make their submission clean and complete
 - If you can fix something, just fix it - don't ask unnecessary questions
 - Be proactive: if something is missing but you can guess it, suggest it
+- CHECK FOR SCAMS: if a project looks suspicious (fake URLs, impersonation, etc.), flag it
 
 Your personality:
-- Based and straightforward - no cringe crypto speak (NEVER say "gm", "wagmi", "lfg")
-- Warm and helpful, especially to first-time contributors
-- Casual, friendly language - like helping a friend
-- Focus on SOLUTIONS, not problems
-- If the PR is good, just approve it with a short friendly message`;
+- Nerdy and enthusiastic about all things CryptoPunks
+- Friendly and welcoming - celebrate new submissions!
+- Helpful and patient, especially with first-time contributors
+- Casual language - like a knowledgeable friend helping out
+- You might drop punk references or trivia when relevant
+- Keep it positive - every legit project is a win for the community`;
 
 export const REPO_OWNER = process.env.GITHUB_REPO_OWNER || "madebypunks";
 export const REPO_NAME = process.env.GITHUB_REPO_NAME || "directory";
@@ -30,13 +52,20 @@ export interface PRFile {
   contents?: string;
 }
 
+export type ReviewStatus =
+  | "ready_for_review" // All good, human can review and merge
+  | "needs_changes" // Contributor needs to update something
+  | "suspicious" // Potential scam or problematic submission
+  | "needs_info"; // Bot needs more information to proceed
+
 export interface ReviewResult {
   summary: string;
+  status: ReviewStatus;
   validationErrors: string[];
   suggestions: string[];
   fixedFiles: { filename: string; content: string }[];
   needsClarification: string[];
-  approved: boolean;
+  suspiciousReasons?: string[];
 }
 
 export interface PRDetails {
@@ -44,6 +73,11 @@ export interface PRDetails {
   title: string;
   body: string | null;
   user: { login: string };
+}
+
+interface GitHubComment {
+  user: { login: string; type: string };
+  body: string;
 }
 
 // GitHub API helper
@@ -63,7 +97,7 @@ export async function getOpenPRs() {
   return github("/pulls?state=open");
 }
 
-export async function getPRComments(prNumber: number) {
+export async function getPRComments(prNumber: number): Promise<GitHubComment[]> {
   return github(`/issues/${prNumber}/comments`);
 }
 
@@ -104,7 +138,7 @@ export async function analyzeWithClaude(prDetails: PRDetails, files: PRFile[]): 
     .map((f) => `### ${f.filename}\n\`\`\`markdown\n${f.contents}\n\`\`\``)
     .join("\n\n");
 
-  const prompt = `${BOT_PERSONALITY}
+  const prompt = `${SYSTEM_PROMPT}
 
 You are reviewing pull requests for Made By Punks, a community directory of CryptoPunks projects.
 
@@ -151,24 +185,31 @@ BE PROACTIVE - fix things yourself whenever possible!
    - creators as strings → convert to numbers
    - Missing tags → suggest relevant ones based on the project
    - Typos in field names → fix them
-3. If the PR looks good → approve with a short friendly message
+3. If the PR looks good → mark as ready for human review
 4. If there are issues → provide the COMPLETE fixed file
 
 Respond in JSON:
 {
   "summary": "Brief, friendly summary (1-2 sentences max)",
-  "approved": true/false,
+  "status": "ready_for_review" | "needs_changes" | "suspicious" | "needs_info",
   "validationErrors": ["only critical issues that block the PR"],
   "suggestions": ["nice-to-have improvements, keep it short"],
   "needsClarification": ["only ask if you truly cannot guess - be specific"],
-  "fixedFiles": [{ "filename": "content/projects/example.md", "content": "complete fixed file" }]
+  "fixedFiles": [{ "filename": "content/projects/example.md", "content": "complete fixed file" }],
+  "suspiciousReasons": ["only if status is suspicious - explain why"]
 }
+
+STATUS GUIDE:
+- "ready_for_review": Everything looks good, a human moderator can review and merge
+- "needs_changes": The contributor needs to fix something (validation errors, missing info)
+- "suspicious": Something looks off (fake URL, impersonation, scam vibes) - explain in suspiciousReasons
+- "needs_info": You need more information from the contributor to proceed
 
 RULES:
 - Keep summary SHORT - this is not an essay
 - If you can fix it, fix it - don't ask
 - fixedFiles must contain the COMPLETE file content (frontmatter + body)
-- Only set approved:false if there are real blocking issues
+- You NEVER approve or merge - you only prepare for human review
 - Be friendly but concise - respect people's time`;
 
   const response = await anthropic.messages.create({
@@ -184,42 +225,55 @@ RULES:
   return JSON.parse(match[0]);
 }
 
-export function formatComment(result: ReviewResult): string {
-  const lines: string[] = [
-    `<img src="${BOT_AVATAR}" width="48" height="48" align="left" style="margin-right: 12px;" />\n`,
-    `### ${BOT_NAME}\n`,
-    result.summary,
-    "",
-    result.approved ? "✅ **Ready to merge**\n" : "⚠️ **Changes requested**\n",
-  ];
+function getStatusBadge(status: ReviewStatus): string {
+  switch (status) {
+    case "ready_for_review":
+      return "✅ **READY FOR HUMAN REVIEW** - A moderator can now review and merge";
+    case "needs_changes":
+      return "🔄 **NEEDS CHANGES** - Please update your submission";
+    case "suspicious":
+      return "🚨 **FLAGGED** - This submission needs careful human verification";
+    case "needs_info":
+      return "❓ **WAITING FOR INFO** - Please answer the questions below";
+  }
+}
 
+export function formatComment(result: ReviewResult): string {
+  const lines: string[] = [result.summary, "", getStatusBadge(result.status), ""];
+
+  if (result.status === "suspicious" && result.suspiciousReasons?.length) {
+    lines.push("### 🚨 Flags", ...result.suspiciousReasons.map((r) => `- ${r}`), "");
+  }
   if (result.validationErrors.length) {
-    lines.push("### ❌ Issues\n", ...result.validationErrors.map((e) => `- ${e}`), "");
+    lines.push("### ❌ Issues", ...result.validationErrors.map((e) => `- ${e}`), "");
   }
   if (result.suggestions.length) {
-    lines.push("### 💡 Suggestions\n", ...result.suggestions.map((s) => `- ${s}`), "");
+    lines.push("### 💡 Suggestions", ...result.suggestions.map((s) => `- ${s}`), "");
   }
   if (result.needsClarification.length) {
-    lines.push("### ❓ Questions\n", ...result.needsClarification.map((q) => `- ${q}`), "");
+    lines.push("### ❓ Questions", ...result.needsClarification.map((q) => `- ${q}`), "");
   }
   if (result.fixedFiles.length) {
-    lines.push("### 🔧 Fixes\n");
+    lines.push("### 🔧 Suggested Fixes", "*Copy these fixes to your files:*", "");
     for (const f of result.fixedFiles) {
-      lines.push(`<details><summary><code>${f.filename}</code></summary>\n`, "```markdown", f.content, "```", "</details>\n");
+      lines.push(`<details><summary><code>${f.filename}</code></summary>`, "", "```markdown", f.content, "```", "</details>", "");
     }
   }
 
-  lines.push("---", `*${BOT_NAME} - AI mod inspired by the legendary Tschuuuly*`);
   return lines.join("\n");
 }
 
-// Review a single PR
-export async function reviewPR(prNumber: number): Promise<{ reviewed: boolean; reason?: string }> {
-  const comments = await getPRComments(prNumber);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const alreadyReviewed = comments.some((c: any) => c.body?.includes(BOT_NAME));
+// Check if the bot has already commented on this PR
+function hasAlreadyReviewed(comments: GitHubComment[]): boolean {
+  const botLogin = `${GITHUB_APP_SLUG}[bot]`;
+  return comments.some((c) => c.user.login === botLogin || c.user.type === "Bot");
+}
 
-  if (alreadyReviewed) {
+// Review a single PR
+export async function reviewPR(prNumber: number, forceReview = false): Promise<{ reviewed: boolean; reason?: string }> {
+  const comments = await getPRComments(prNumber);
+
+  if (!forceReview && hasAlreadyReviewed(comments)) {
     return { reviewed: false, reason: "already_reviewed" };
   }
 
