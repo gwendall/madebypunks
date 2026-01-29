@@ -826,6 +826,8 @@ export interface CreatePRFromDiscussionResult {
   prUrl?: string;
   error?: string;
   isUpdate?: boolean; // true if updated existing PR, false if created new
+  imageStatus?: "added" | "failed" | "not_requested"; // Track what happened with the image
+  imageError?: string; // Error message if image failed
 }
 
 export async function createPRFromDiscussion(
@@ -845,6 +847,8 @@ export async function createPRFromDiscussion(
     // Check if there's already a PR for this discussion
     const existingPR = await findBotPRForDiscussion(discussionNumber);
     let thumbnailPath: string | undefined;
+    let imageStatus: "added" | "failed" | "not_requested" = "not_requested";
+    let imageError: string | undefined;
 
     if (existingPR) {
       // Update the existing PR
@@ -853,6 +857,7 @@ export async function createPRFromDiscussion(
         const imageResult = await addImageToPR(existingPR.branchName, imageUrl, projectSlug);
         if (imageResult.success && imageResult.thumbnailPath) {
           thumbnailPath = imageResult.thumbnailPath;
+          imageStatus = "added";
           // Update the file content to include the thumbnail
           files = files.map(f => {
             if (f.filename.includes(projectSlug) && !f.content.includes("thumbnail:")) {
@@ -864,6 +869,9 @@ export async function createPRFromDiscussion(
             }
             return f;
           });
+        } else {
+          imageStatus = "failed";
+          imageError = imageResult.error || "Unknown error downloading image";
         }
       }
 
@@ -880,6 +888,8 @@ export async function createPRFromDiscussion(
         prNumber: existingPR.prNumber,
         prUrl: existingPR.prUrl,
         isUpdate: true,
+        imageStatus,
+        imageError,
       };
     }
 
@@ -894,6 +904,7 @@ export async function createPRFromDiscussion(
       const imageResult = await addImageToPR(branchName, imageUrl, projectSlug);
       if (imageResult.success && imageResult.thumbnailPath) {
         thumbnailPath = imageResult.thumbnailPath;
+        imageStatus = "added";
         // Update the file content to include the thumbnail
         files = files.map(f => {
           if (f.filename.includes(projectSlug) && !f.content.includes("thumbnail:")) {
@@ -905,6 +916,9 @@ export async function createPRFromDiscussion(
           }
           return f;
         });
+      } else {
+        imageStatus = "failed";
+        imageError = imageResult.error || "Unknown error downloading image";
       }
     }
 
@@ -932,7 +946,7 @@ ${thumbnailPath ? `\n**Thumbnail:** Added \`${thumbnailPath}\`` : ""}
 
     const { prNumber, prUrl } = await createPR(branchName, prTitle, prBody);
 
-    return { success: true, prNumber, prUrl, isUpdate: false };
+    return { success: true, prNumber, prUrl, isUpdate: false, imageStatus, imageError };
   } catch (error) {
     console.error("Error creating PR from discussion:", error);
     return { success: false, error: String(error) };
@@ -1741,10 +1755,20 @@ export async function handleDiscussion(
       result.createPR.projectSlug
     );
 
-    // Append PR info to the reply
+    // Append PR info to the reply - be honest about what actually happened
     if (prResult.success && prResult.prUrl) {
       const prAction = prResult.isUpdate ? "updated" : "created";
-      result.reply += `\n\n---\n🤖 I've ${prAction} a PR for you: ${prResult.prUrl}\n\nA human moderator will review and merge it!`;
+      let statusMessage = `\n\n---\n🤖 I've ${prAction} a PR for you: ${prResult.prUrl}`;
+
+      // Add image status info
+      if (prResult.imageStatus === "added") {
+        statusMessage += "\n\n✅ Thumbnail image added successfully!";
+      } else if (prResult.imageStatus === "failed") {
+        statusMessage += `\n\n⚠️ **Note:** I couldn't download the image (${prResult.imageError || "GitHub doesn't allow server-side access to uploaded images"}). You'll need to add a thumbnail manually, or provide a direct image URL (e.g., from imgur).`;
+      }
+
+      statusMessage += "\n\nA human moderator will review and merge it!";
+      result.reply += statusMessage;
     } else if (prResult.error) {
       result.reply += `\n\n---\n⚠️ I tried to create a PR but hit an error: ${prResult.error}\n\nYou might need to submit manually.`;
     }
