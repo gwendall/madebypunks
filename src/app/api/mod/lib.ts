@@ -99,7 +99,7 @@ export interface ReviewResult {
   status: ReviewStatus;
   validationErrors: string[];
   suggestions: string[];
-  fixedFiles: { filename: string; content: string }[];
+  fixedFiles: { filename: string; content: string | null }[]; // null = delete file
   needsClarification: string[];
   suspiciousReasons?: string[];
 }
@@ -379,10 +379,10 @@ async function getFileSHA(owner: string, repo: string, path: string, branch: str
   }
 }
 
-// Push fixed files to the PR branch
+// Push fixed files to the PR branch (supports create, update, and delete)
 export async function pushFixesToPR(
   prNumber: number,
-  fixedFiles: { filename: string; content: string }[]
+  fixedFiles: { filename: string; content: string | null }[]
 ): Promise<{ success: boolean; commitUrl?: string; error?: string }> {
   if (fixedFiles.length === 0) {
     return { success: false, error: "No files to push" };
@@ -396,8 +396,42 @@ export async function pushFixesToPR(
     let lastCommitUrl = "";
 
     for (const file of fixedFiles) {
-      // Get current file SHA if it exists (required for updates)
+      // Get current file SHA if it exists (required for updates/deletes)
       const fileSHA = await getFileSHA(branchInfo.owner, branchInfo.repo, file.filename, branchInfo.branch);
+
+      // If content is null/undefined/empty, delete the file
+      if (file.content === null || file.content === undefined || file.content === "") {
+        if (fileSHA) {
+          // File exists, delete it
+          const res = await fetch(
+            `https://api.github.com/repos/${branchInfo.owner}/${branchInfo.repo}/contents/${file.filename}`,
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/vnd.github.v3+json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                message: `fix: Remove ${file.filename} by PunkModBot\n\n🤖 Removed duplicate/unnecessary file`,
+                sha: fileSHA,
+                branch: branchInfo.branch,
+              }),
+            }
+          );
+
+          if (!res.ok) {
+            const error = await res.text();
+            console.error(`Failed to delete ${file.filename}:`, error);
+            return { success: false, error: `Failed to delete ${file.filename}: ${error}` };
+          }
+
+          const result = await res.json();
+          lastCommitUrl = result.commit?.html_url || "";
+        }
+        // If file doesn't exist and content is null, nothing to do
+        continue;
+      }
 
       // Create or update the file
       const res = await fetch(
@@ -633,6 +667,50 @@ async function createBranch(branchName: string): Promise<void> {
   }
 }
 
+// Delete a file on a branch (NOT on main - safety check built in)
+async function deleteFileOnBranch(
+  branchName: string,
+  filename: string,
+  commitMessage: string
+): Promise<{ success: boolean; error?: string }> {
+  // SAFETY: Never allow pushing to main
+  if (branchName === "main" || branchName === "master") {
+    throw new Error("SAFETY: Cannot push directly to main/master branch");
+  }
+
+  const token = await getInstallationToken();
+
+  // Get file SHA (required for deletion)
+  const existingSHA = await getFileSHA(REPO_OWNER, REPO_NAME, filename, branchName);
+  if (!existingSHA) {
+    // File doesn't exist, nothing to delete
+    return { success: true };
+  }
+
+  const res = await fetch(
+    `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${filename}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: commitMessage,
+        sha: existingSHA,
+        branch: branchName,
+      }),
+    }
+  );
+
+  if (!res.ok) {
+    const error = await res.text();
+    return { success: false, error };
+  }
+
+  return { success: true };
+}
+
 // Create or update a file on a branch (NOT on main - safety check built in)
 async function createFileOnBranch(
   branchName: string,
@@ -643,6 +721,11 @@ async function createFileOnBranch(
   // SAFETY: Never allow pushing to main
   if (branchName === "main" || branchName === "master") {
     throw new Error("SAFETY: Cannot push directly to main/master branch");
+  }
+
+  // Validate content
+  if (content === null || content === undefined) {
+    throw new Error(`Invalid content for file ${filename}: content is null/undefined`);
   }
 
   const token = await getInstallationToken();
@@ -1281,12 +1364,20 @@ export function formatComment(
         ""
       );
       for (const f of result.fixedFiles) {
-        lines.push(`<details><summary><code>${f.filename}</code></summary>`, "", "```markdown", f.content, "```", "</details>", "");
+        if (f.content === null || f.content === "") {
+          lines.push(`- **Delete** \`${f.filename}\``, "");
+        } else {
+          lines.push(`<details><summary><code>${f.filename}</code></summary>`, "", "```markdown", f.content, "```", "</details>", "");
+        }
       }
     } else {
       lines.push("### 🔧 Suggested Fixes", "*Copy these fixes to your files:*", "");
       for (const f of result.fixedFiles) {
-        lines.push(`<details><summary><code>${f.filename}</code></summary>`, "", "```markdown", f.content, "```", "</details>", "");
+        if (f.content === null || f.content === "") {
+          lines.push(`- **Delete** \`${f.filename}\``, "");
+        } else {
+          lines.push(`<details><summary><code>${f.filename}</code></summary>`, "", "```markdown", f.content, "```", "</details>", "");
+        }
       }
     }
   }
