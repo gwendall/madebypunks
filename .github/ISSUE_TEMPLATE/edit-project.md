@@ -6,8 +6,14 @@ labels: edit-request, project
 assignees: ""
 ---
 
-Tell us what you'd like to change about this project. You can update the description, links, add more details, or fix any errors.
+Just tell us what you want. You can:
 
-Just describe what needs to be changed in your own words below:
+- Update this project's description, links, or details
+- Add or change the creators linked to this project
+- Update the punk profiles behind this project
+- Fix errors or outdated info
+- Anything else - just ask!
+
+Describe what you'd like to change:
 
 

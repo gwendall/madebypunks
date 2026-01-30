@@ -6,8 +6,13 @@ labels: edit-request, punk-profile
 assignees: ""
 ---
 
-Tell us what you'd like to change about this punk's profile. You can update their name, links, bio, or anything else.
+Just tell us what you want. You can:
 
-Just describe what needs to be changed in your own words below:
+- Update this punk's name, bio, or links
+- Add or remove projects linked to this punk
+- Fix errors or outdated info
+- Anything else - just ask!
+
+Describe what you'd like to change:
 
 

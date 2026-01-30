@@ -6,14 +6,14 @@ labels: submission
 assignees: ""
 ---
 
-Tell us about yourself and/or your work. Include:
+Just tell us what you want to add. You can submit:
 
-- Your punk ID
-- Your name (if you want)
-- Your links (X/Twitter, website, etc.)
-- A short bio (optional)
-- If you have a project: name, URL, and what it does
+- One punk profile, or many
+- One project, or many
+- A mix of profiles and projects
+- Updates to existing entries
+- Anything else - just ask!
 
-Just write freely below:
+Describe what you'd like to add:
 
 
