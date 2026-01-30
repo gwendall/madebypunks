@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyWebhookSignature, reviewPR, getPRComments, handleDiscussion, handleIssue, getIssueComments } from "../lib";
+import { verifyWebhookSignature, reviewPR, getPRComments, handleDiscussion, handleIssue } from "../lib";
 
 const BOT_LOGIN = `${process.env.GITHUB_APP_SLUG || "punkmodbot"}[bot]`;
 
@@ -63,7 +63,8 @@ function isPullRequestEvent(event: WebhookEvent): event is PullRequestEvent {
 }
 
 function isIssuesEvent(event: WebhookEvent): event is IssuesEvent {
-  return "issue" in event && !("comment" in event) && !("issue" in event && "pull_request" in (event as IssuesEvent).issue);
+  // Issues event has "issue" but no "comment" field
+  return "issue" in event && !("comment" in event);
 }
 
 function isIssueCommentEvent(event: WebhookEvent): event is IssueCommentEvent {
@@ -98,6 +99,8 @@ export async function POST(request: NextRequest) {
 
   const event = request.headers.get("x-github-event");
   const payload: WebhookEvent = JSON.parse(rawBody);
+
+  console.log(`[webhook] Received event: ${event}, action: ${(payload as { action?: string }).action}`);
 
   // Handle pull_request events
   if (event === "pull_request" && isPullRequestEvent(payload)) {
@@ -174,18 +177,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Failed to re-review PR", pr: issueNumber }, { status: 500 });
       }
     } else {
-      // Handle standalone issue comment
-      const comments = await getIssueComments(issueNumber);
-      const botHasCommented = comments.some((c) => c.user.login === BOT_LOGIN);
-
-      // If bot hasn't commented yet, only respond if mentioned
-      if (!botHasCommented) {
-        const commentBody = payload.comment.body.toLowerCase();
-        const mentionsBot = commentBody.includes("@punkmodbot") || commentBody.includes("punkmodbot");
-        if (!mentionsBot) {
-          return NextResponse.json({ event: "issue_comment", skipped: true, reason: "not_participating" });
-        }
-      }
+      // Handle standalone issue comment - always respond to issue comments
+      console.log(`[webhook] Handling issue comment on #${issueNumber}`);
 
       try {
         const result = await handleIssue(issueNumber);
