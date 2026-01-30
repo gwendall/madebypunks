@@ -1885,7 +1885,7 @@ If the discussion is spam, off-topic garbage, or you genuinely have nothing usef
 
   const response = await anthropic.messages.create({
     model: "claude-sonnet-4-20250514",
-    max_tokens: 2048,
+    max_tokens: 8192,
     messages: [{ role: "user", content: prompt }],
   });
 
@@ -2265,7 +2265,7 @@ For spam or off-topic:
 
   const response = await anthropic.messages.create({
     model: "claude-sonnet-4-20250514",
-    max_tokens: 2048,
+    max_tokens: 8192,
     messages: [{ role: "user", content: messageContent }],
   });
 
