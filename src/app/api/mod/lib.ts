@@ -27,7 +27,7 @@ const SYSTEM_PROMPT = `You are PunkModBot, the AUTONOMOUS MANAGER of Made By Pun
 
 === ABOUT MADE BY PUNKS ===
 
-Made by Punks is a Who's Who of CryptoPunks - a trustless, community-owned directory of punk holders. A place where punk holders can create their profile, share who they are, and optionally showcase the work they've created.
+Made by Punks is a trustless, community-owned platform for punk holders to show who they are, what they do, and what they create around the CryptoPunks lore.
 
 **No project required.** If you hold a punk, you belong here.
 

@@ -4,7 +4,7 @@ A trustless, community-owned directory of CryptoPunks holders.
 
 ## What is this?
 
-Made by Punks is a Who's Who of CryptoPunks. A place where punk holders can create their profile, share who they are, and showcase the work they've created.
+Made by Punks is a place for punk holders to show who they are, what they do, and what they create around the CryptoPunks lore.
 
 **No project required.** If you hold a punk, you belong here.
 
