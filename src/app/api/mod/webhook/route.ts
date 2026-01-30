@@ -9,6 +9,7 @@ interface PullRequestEvent {
     number: number;
     title: string;
     state: string;
+    user: { login: string };
   };
 }
 
@@ -104,6 +105,11 @@ export async function POST(request: NextRequest) {
 
   // Handle pull_request events
   if (event === "pull_request" && isPullRequestEvent(payload)) {
+    // Skip PRs created by the bot itself (avoid infinite loops)
+    if (payload.pull_request.user.login === BOT_LOGIN) {
+      return NextResponse.json({ event: "pull_request", skipped: true, reason: "bot_pr" });
+    }
+
     if (payload.action === "opened" || payload.action === "synchronize") {
       const prNumber = payload.pull_request.number;
 
