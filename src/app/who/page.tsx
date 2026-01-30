@@ -53,7 +53,7 @@ export default function WhoPage() {
                     href={`/${punk.id}`}
                     className="group flex flex-col items-center"
                   >
-                    <div className="bg-punk-blue-light group-hover:bg-punk-blue transition-colors">
+                    <div className="w-[120px] h-[120px] overflow-hidden bg-punk-blue-light group-hover:bg-punk-blue transition-colors">
                       <PunkAvatar
                         punkId={punk.id}
                         size={120}

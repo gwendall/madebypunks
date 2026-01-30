@@ -21,7 +21,7 @@ export function PunkAvatar({
 }: PunkAvatarProps) {
   return (
     <span
-      className={`relative overflow-hidden inline-block ${noBackground ? "" : "bg-punk-blue-light"} ${className}`}
+      className={`relative overflow-hidden block ${noBackground ? "" : "bg-punk-blue-light"} ${className}`}
       style={{ width: size, height: size }}
     >
       <Image
