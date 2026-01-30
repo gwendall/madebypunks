@@ -4,9 +4,9 @@ import { Header, Footer, PunkAvatar, Button } from "@/components";
 import { getPunksAlphabetically, getAllPunks } from "@/data/punks";
 
 export const metadata: Metadata = {
-  title: "Who | Made by Punks",
+  title: "Punks Who's Who | Made by Punks",
   description:
-    "Meet the CryptoPunks holders - artists, developers, and creators exploring punk art and culture.",
+    "The definitive directory of CryptoPunks holders - artists, developers, and creators exploring punk art and culture.",
 };
 
 export default function WhoPage() {

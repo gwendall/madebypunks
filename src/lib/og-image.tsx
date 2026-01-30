@@ -14,6 +14,7 @@ interface OGImageProps {
   punkIds?: number[];
   punkId?: number;
   projectCount?: number;
+  titleColor?: string;
 }
 
 interface ProjectOGImageProps {
@@ -66,7 +67,7 @@ export async function generateOGImage(
   options: OGImageOptions
 ): Promise<ImageResponse> {
   const { width, height } = options;
-  const { title, subtitle, punkIds, punkId, projectCount } = props;
+  const { title, subtitle, punkIds, punkId, projectCount, titleColor } = props;
 
   // Load Silkscreen font
   const silkscreenFont = await loadSilkscreenFont();
@@ -287,12 +288,12 @@ export async function generateOGImage(
               fontFamily: "Silkscreen",
               fontSize: 100,
               fontWeight: 400,
-              color: COLORS.punkPink,
+              color: titleColor || COLORS.punkPink,
               textTransform: "uppercase",
               lineHeight: 1,
             }}
           >
-            Made by Punks
+            {title}
           </div>
 
           {/* Tagline */}
