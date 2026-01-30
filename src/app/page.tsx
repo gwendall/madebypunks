@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Header, Footer, PunkSection, Button } from "@/components";
 import { getAllPunks, getAllTags, PROJECTS, getProjectGroups } from "@/data/punks";
 import { SITE_NAME, SITE_TAGLINE } from "@/lib/constants";
@@ -25,14 +26,14 @@ export default function HomePage() {
             </p>
 
             <div className="mt-8 flex items-center justify-center gap-6">
-              <div className="pixel-shadow bg-punk-blue-light px-5 py-2 transform hover:-translate-y-1 transition-transform">
+              <Link href="/who" className="pixel-shadow bg-punk-blue-light px-5 py-2 transform hover:-translate-y-1 transition-transform">
                 <span className="text-2xl font-bold text-white">
                   {punkIds.length}
                 </span>
                 <span className="ml-2 font-bold uppercase tracking-wider text-white font-pixel">
                   Punks
                 </span>
-              </div>
+              </Link>
               <div className="pixel-shadow bg-punk-pink px-5 py-2 transform hover:-translate-y-1 transition-transform">
                 <span className="text-2xl font-bold text-white">
                   {totalProjects}
@@ -77,13 +78,13 @@ export default function HomePage() {
         <section className="bg-punk-pink">
           <div className="mx-auto max-w-7xl px-4 py-12 text-center sm:px-6 lg:px-8">
             <h2 className="text-xl font-bold uppercase tracking-wider text-white drop-shadow-[2px_2px_0_rgba(0,0,0,0.2)]">
-              Exploring punk art & culture?
+              Own a CryptoPunk?
             </h2>
             <p className="mt-3 text-white/90 text-base max-w-lg mx-auto">
-              Share your CryptoPunks-inspired work with the community.
+              Create your profile, share your work, or just show who you are. No project required.
             </p>
             <Button href="/add" variant="white" size="sm" className="mt-6 text-punk-pink">
-              Share Your Work →
+              Join the Directory →
             </Button>
           </div>
         </section>

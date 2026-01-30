@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HiUsers } from "react-icons/hi";
 import { SITE_NAME } from "@/lib/constants";
 import { Button } from "./Button";
 import { SearchOverlay } from "./SearchOverlay";
@@ -18,8 +19,15 @@ export function Header() {
 
         <nav className="flex items-center gap-4">
           <SearchOverlay items={searchItems} />
+          <Link
+            href="/who"
+            className="w-9 h-9 flex items-center justify-center hover:bg-foreground/5 transition-colors"
+            title="Who"
+          >
+            <HiUsers className="w-5 h-5" />
+          </Link>
           <Button href="/add" variant="primary" size="sm" className="!hidden sm:!inline-flex">
-            + Share Work
+            + Join
           </Button>
           <Button href="/add" variant="primary" size="sm" className="sm:!hidden w-9 h-9 p-0 justify-center">
             +

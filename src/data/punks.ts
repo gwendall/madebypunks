@@ -226,6 +226,56 @@ export function getSearchData(): SearchItem[] {
   return items;
 }
 
+/**
+ * Get all punks sorted alphabetically by name
+ * Returns an array of objects with the letter and punks for that letter
+ */
+export interface AlphabetGroup {
+  letter: string;
+  punks: Punk[];
+}
+
+export function getPunksAlphabetically(): AlphabetGroup[] {
+  // Helper to get display name - explicitly return string
+  const getDisplayName = (punk: Punk): string => {
+    if (punk.name && typeof punk.name === "string") {
+      return punk.name;
+    }
+    return "Punk #" + String(punk.id);
+  };
+
+  // Sort punks by name (or by ID if no name)
+  const sortedPunks = [...PUNKS].sort((a, b) => {
+    const nameA = String(getDisplayName(a)).toLowerCase();
+    const nameB = String(getDisplayName(b)).toLowerCase();
+    return nameA.localeCompare(nameB);
+  });
+
+  // Group by first letter
+  const groups = new Map<string, Punk[]>();
+
+  for (const punk of sortedPunks) {
+    const name = getDisplayName(punk);
+    const firstChar = name.charAt(0).toUpperCase();
+    // Use # for numbers, otherwise use the letter
+    const letter = /[A-Z]/i.test(firstChar) ? firstChar : "#";
+
+    if (!groups.has(letter)) {
+      groups.set(letter, []);
+    }
+    groups.get(letter)!.push(punk);
+  }
+
+  // Convert to array and sort by letter (# first, then A-Z)
+  return Array.from(groups.entries())
+    .sort(([letterA], [letterB]) => {
+      if (letterA === "#") return -1;
+      if (letterB === "#") return 1;
+      return letterA.localeCompare(letterB);
+    })
+    .map(([letter, punks]) => ({ letter, punks }));
+}
+
 export function getProjectGroups(): CreatorGroup[] {
   // Get all punks who have at least one project
   const punksWithProjects = new Set<number>();

@@ -1,53 +1,59 @@
 ---
-title: Add Your Work
+title: Join the Directory
 ---
 
-# Share Your Work
+# Join the Directory
 
-Made by Punks is a directory of works that explore CryptoPunks art and culture. If you hold a punk and you've created something inspired by or related to CryptoPunks, we want to feature it here.
+Made by Punks is a directory of CryptoPunks holders and the works they create. Whether you've built something around punk culture or you just want to show the world who you are - this is your place.
+
+**No project required.** If you hold a punk, you belong here.
 
 ---
 
-## What Counts?
+## Two Paths
 
-Anything that explores, celebrates, or builds on CryptoPunks.
+### Just want a profile?
 
-- **Art** - Derivatives, remixes, animations, illustrations inspired by punks
-- **Writing** - Books, essays, zines about punk culture and history
-- **Film** - Documentaries, videos about the punk community
+Create your punk page and tell people who you are. Share your story, your links, your vibe. That's it.
+
+### Built something?
+
+Share your CryptoPunks-inspired work with the community:
+
+- **Art** - Derivatives, remixes, animations, illustrations
+- **Writing** - Books, essays, zines about punk culture
+- **Film** - Documentaries, videos about the community
 - **Music** - Soundtracks, albums inspired by punk aesthetics
-- **Physical goods** - Prints, merch, collectibles featuring punks
-- **Tools** - Apps, explorers, utilities for the punk community
-- **Community projects** - Events, collabs, initiatives around punks
+- **Physical goods** - Prints, merch, collectibles
+- **Tools** - Apps, explorers, utilities
+- **Community projects** - Events, collabs, initiatives
 
 If it's about punks and you made it, it belongs here.
 
 ---
 
-## Two Ways to Add Your Work
+## How to Join
 
 ### Option 1: Fill Out a Form (Easy)
 
-Not comfortable with GitHub? No problem. Fill out [this form](https://github.com/madebypunks/directory/issues/new?template=project-submission.md&title=New+Project:+[Your+Project+Name]) and we'll add your work for you.
+Not comfortable with GitHub? No problem. Fill out [this form](https://github.com/madebypunks/directory/issues/new?template=submission.md&title=New+Submission) and we'll add you.
 
 Just tell us:
 - Your punk ID
-- Name of your work
-- What it is (a sentence or two)
-- Website or link
-- Any other links (socials, etc.)
-- A thumbnail image (optional)
+- Your name (optional)
+- Your links (Twitter, website, etc.)
+- A short bio (optional)
+- If you have a project: name, description, URL
 
 A maintainer will take it from there.
 
 ### Option 2: Submit via GitHub (For Those Who Know Git)
 
-If you're comfortable with GitHub, you can add your work directly:
+If you're comfortable with GitHub, you can add yourself directly:
 
 1. **Fork** the [repository](https://github.com/madebypunks/directory)
-2. **Create** a file in `content/projects/your-project.md`
-3. **Add** your info (see format below)
-4. **Submit** a pull request
+2. **Create** your file(s) - see formats below
+3. **Submit** a pull request
 
 That's it. No gatekeepers, no approvals process. Just git.
 
@@ -61,46 +67,18 @@ PunkMod will:
 - **Check your files** for missing or incorrect data
 - **Verify your URLs** to make sure they work
 - **Filter scams and spam** - protects the directory from fake projects and phishing attempts
-- **Ensure relevance** - makes sure submissions are actually related to CryptoPunks
 - **Suggest fixes** if something needs adjusting
 - **Answer questions** - just reply to the bot!
 
-Don't stress about getting everything perfect on your first try. PunkMod is patient and will help you through the process. It's like having a helpful punk friend who knows all the rules and keeps the bad actors out.
+Don't stress about getting everything perfect on your first try. PunkMod is patient and will help you through the process.
 
 > PunkMod prepares submissions for review but never merges anything. A human maintainer always makes the final call.
 
 ---
 
-## File Format
+## Punk Profile Format
 
-```
----
-name: Your Work Name
-description: A brief description (1-2 sentences)
-url: https://your-project.com
-launchDate: 2024-01-15
-tags:
-  - Art
-  - Book
-creators:
-  - 1234
-links:
-  - https://x.com/your_handle
-  - https://github.com/your_repo
-  - https://discord.gg/invite
----
-
-Write more about your work here if you want.
-```
-
-**Tags to choose from:**
-Art, Book, Film, Documentary, Music, Photography, Animation, Illustration, Derivative, Generative, History, Guide, Education, Creation, Memes, Fun, Playful, Community, Collector, Marketplace, Explorer, Archive
-
----
-
-## Add Your Punk Profile
-
-Want your own page? Create `content/punks/[YOUR_PUNK_ID].md`:
+Create `content/punks/[YOUR_PUNK_ID].md`:
 
 ```
 ---
@@ -111,13 +89,43 @@ links:
 ---
 
 Write anything you want here. This is your space.
+Share your story, your interests, what you're working on.
 ```
+
+That's all you need. No project required.
 
 ---
 
-## Collabs Welcome
+## Project Format (Optional)
 
-Works can have multiple creators. List all the punk IDs:
+If you've built something, create `content/projects/your-project.md`:
+
+```
+---
+name: Your Work Name
+description: A brief description (1-2 sentences)
+url: https://your-project.com
+launchDate: 2024-01-15
+tags:
+  - Art
+  - Tool
+creators:
+  - 1234
+links:
+  - https://x.com/your_handle
+---
+
+Write more about your work here if you want.
+```
+
+**Tags to choose from:**
+Art, Book, Film, Documentary, Music, Photography, Animation, Illustration, Derivative, Generative, History, Guide, Education, Creation, Memes, Fun, Playful, Community, Collector, Marketplace, Explorer, Archive
+
+---
+
+## Collabs
+
+Projects can have multiple creators. List all the punk IDs:
 
 ```
 creators:
@@ -125,11 +133,11 @@ creators:
   - 5678
 ```
 
-The work will appear on both punk pages.
+The project will appear on both punk pages.
 
 ---
 
-## Add a Thumbnail
+## Thumbnails
 
 Drop your image in `public/projects/` and reference it:
 
