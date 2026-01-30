@@ -3,7 +3,7 @@ name: Punks.art
 description: A personal playground of generative art, interactive tools, and visual studies exploring the CryptoPunks universe.
 thumbnail: /projects/punks-art.png
 url: https://punks.art
-launchDate: 2026-01-01
+launchDate: '2026-01-01'
 tags:
   - Art
   - Tool
