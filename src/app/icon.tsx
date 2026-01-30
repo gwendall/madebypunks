@@ -29,6 +29,7 @@ export default async function Icon() {
             fontSize: 20,
             fontWeight: 400,
             color: "white",
+            textShadow: "2px 2px 0 rgba(0,0,0,0.3)",
           }}
         >
           P
