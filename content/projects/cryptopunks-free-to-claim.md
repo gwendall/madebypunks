@@ -20,7 +20,7 @@ creators:
 thumbnail: /projects/cryptopunks-free-to-claim.jpg
 ---
 
-CryptoPunks: Free to Claim is an epic 800+ page book published by Phaidon, one of the world's pre-eminent art book publishers. Co-edited by Nathalie Stone and Sean Bonner, it goes far beyond a simple catalog of all 10,000 CryptoPunks.
+CryptoPunks: Free to Claim is an epic 800+ page book published by Phaidon, one of the world's pre-eminent art book publishers. Co-edited by Stone and Sean Bonner, it goes far beyond a simple catalog of all 10,000 CryptoPunks.
 
 ## What's Inside
 
