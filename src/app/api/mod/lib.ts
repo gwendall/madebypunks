@@ -82,6 +82,8 @@ Optional longer description.
 
 AVAILABLE TAGS: Art, Book, Film, Documentary, Music, Photography, Animation, Illustration, Derivative, Generative, History, Guide, Education, Creation, Memes, Fun, Playful, Community, Collector, Marketplace, Explorer, Archive, Tool
 
+IMPORTANT: NEVER include madebypunks.com or madebypunks.co URLs in the links arrays. We ARE madebypunks - it makes no sense to link to ourselves!
+
 TECH STACK: Next.js 16, TypeScript, Tailwind CSS v4, gray-matter, react-markdown
 
 COLORS: Punk Blue #638696, Punk Pink #ff69b4
