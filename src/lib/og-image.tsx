@@ -25,8 +25,9 @@ interface ProjectOGImageProps {
   tags?: string[];
 }
 
-function getPunkImageUrl(punkId: number, size: number = 480) {
-  return `https://punks.art/api/punks/${punkId}?format=png&size=${size}&background=v2`;
+function getPunkImageUrl(punkId: number) {
+  // Always use size=24, CSS pixelated rendering will scale it up
+  return `https://punks.art/api/punks/${punkId}?format=png&size=24&background=v2`;
 }
 
 // Load Silkscreen font from Google Fonts
