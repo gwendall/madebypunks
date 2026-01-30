@@ -15,7 +15,7 @@ links:
   - https://piv.art/all?filter=punkism
 ---
 
-Punkism reimagines CryptoPunks through various artistic movements and styles—constantly deconstructing and recontextualizing cultural icons. The series spans suprematism, brutalism, cubism, modernism, and contemporary pixel art aesthetics.
+Punkism reimagines CryptoPunks through various artistic movements and styles - constantly deconstructing and recontextualizing cultural icons. The series spans suprematism, brutalism, cubism, modernism, and contemporary pixel art aesthetics.
 
 ## Artistic Movements
 

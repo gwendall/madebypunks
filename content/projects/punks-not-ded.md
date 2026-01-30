@@ -13,7 +13,7 @@ creators:
   - 4736
 ---
 
-Punks: Not Ded is Sean Bonner's unofficial companion to CryptoPunks: Free to Claim. Because CryptoPunks is a living thing - changing day to day with new stories and revised history—this addendum captures what couldn't make the cut-off date for the main book.
+Punks: Not Ded is Sean Bonner's unofficial companion to CryptoPunks: Free to Claim. Because CryptoPunks is a living thing - changing day to day with new stories and revised history - this addendum captures what couldn't make the cut-off date for the main book.
 
 ## What's Inside
 
