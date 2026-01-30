@@ -26,10 +26,11 @@ export default async function Icon() {
         <div
           style={{
             fontFamily: "Silkscreen",
-            fontSize: 20,
+            fontSize: 24,
             fontWeight: 400,
             color: "white",
             textShadow: "2px 2px 0 rgba(0,0,0,0.3)",
+            marginTop: -2,
           }}
         >
           P
