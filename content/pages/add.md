@@ -164,4 +164,6 @@ This is lore that belongs to everyone. Take it and build.
 
 ## Questions?
 
-Open an issue on [GitHub](https://github.com/madebypunks/directory/issues) or reach out to one of the maintainers.
+Join the [community discussion](https://github.com/madebypunks/directory/discussions) on GitHub. PunkMod is there to answer your questions about the directory, submissions, or anything punk-related.
+
+You can also [open an issue](https://github.com/madebypunks/directory/issues) for bug reports or specific requests.
