@@ -28,7 +28,18 @@ export async function generateMetadata({
 
   const projects = getProjectsByPunk(punkId);
   const name = punk.name || `Punk #${punkId}`;
-  const description = `Discover ${projects.length} work${projects.length !== 1 ? "s" : ""} inspired by Punk #${punkId}. Made by Punks - a community-curated directory of CryptoPunks works.`;
+
+  // Build engaging description based on whether they have a name and/or works
+  let description: string;
+  if (punk.name && projects.length > 0) {
+    description = `Meet ${punk.name}, owner of CryptoPunk #${punkId}. Explore ${projects.length} work${projects.length !== 1 ? "s" : ""} they've created.`;
+  } else if (punk.name) {
+    description = `Meet ${punk.name}, owner of CryptoPunk #${punkId}. Discover their profile on Made by Punks.`;
+  } else if (projects.length > 0) {
+    description = `Discover ${projects.length} work${projects.length !== 1 ? "s" : ""} created by the owner of CryptoPunk #${punkId}.`;
+  } else {
+    description = `View the profile of CryptoPunk #${punkId} owner on Made by Punks.`;
+  }
 
   return {
     title: `${name} | Made by Punks`,
