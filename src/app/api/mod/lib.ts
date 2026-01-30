@@ -1,42 +1,80 @@
 import Anthropic from "@anthropic-ai/sdk";
 import crypto from "crypto";
 
-// Helper to parse JSON from Claude's response, handling common issues
+// Helper to repair and parse JSON from Claude's response
+// Handles common issues like unescaped newlines in strings
 function parseClaudeJSON<T>(text: string): T {
   // Extract JSON from the response
   const match = text.match(/\{[\s\S]*\}/);
   if (!match) throw new Error("No JSON in response");
 
-  let jsonStr = match[0];
+  const jsonStr = match[0];
 
   // Try parsing as-is first
   try {
     return JSON.parse(jsonStr);
-  } catch (e) {
-    // If parsing fails, try to fix common issues
+  } catch (initialError) {
     console.log("[parseClaudeJSON] Initial parse failed, attempting repair...");
 
-    // Fix unescaped newlines in string values
-    // This regex finds strings and escapes any literal newlines inside them
-    jsonStr = jsonStr.replace(/"([^"\\]|\\.)*"/g, (match) => {
-      return match
-        .replace(/\n/g, "\\n")
-        .replace(/\r/g, "\\r")
-        .replace(/\t/g, "\\t");
-    });
+    // Process character by character to escape newlines inside strings
+    let repaired = "";
+    let inString = false;
+    let escape = false;
+
+    for (let i = 0; i < jsonStr.length; i++) {
+      const char = jsonStr[i];
+
+      if (escape) {
+        repaired += char;
+        escape = false;
+        continue;
+      }
+
+      if (char === "\\") {
+        repaired += char;
+        escape = true;
+        continue;
+      }
+
+      if (char === '"') {
+        repaired += char;
+        inString = !inString;
+        continue;
+      }
+
+      // If we're inside a string and encounter a newline, escape it
+      if (inString) {
+        if (char === "\n") {
+          repaired += "\\n";
+          continue;
+        }
+        if (char === "\r") {
+          repaired += "\\r";
+          continue;
+        }
+        if (char === "\t") {
+          repaired += "\\t";
+          continue;
+        }
+      }
+
+      repaired += char;
+    }
 
     try {
-      return JSON.parse(jsonStr);
+      return JSON.parse(repaired);
     } catch (e2) {
-      // If still failing, try a more aggressive approach:
-      // Find the last valid closing brace
+      console.log("[parseClaudeJSON] Repair attempt 1 failed, trying truncation...");
+
+      // If still failing, the JSON might be truncated
+      // Try to find a valid JSON endpoint
       let depth = 0;
       let lastValidEnd = -1;
-      let inString = false;
-      let escape = false;
+      inString = false;
+      escape = false;
 
-      for (let i = 0; i < jsonStr.length; i++) {
-        const char = jsonStr[i];
+      for (let i = 0; i < repaired.length; i++) {
+        const char = repaired[i];
 
         if (escape) {
           escape = false;
@@ -48,7 +86,7 @@ function parseClaudeJSON<T>(text: string): T {
           continue;
         }
 
-        if (char === '"' && !escape) {
+        if (char === '"') {
           inString = !inString;
           continue;
         }
@@ -65,17 +103,18 @@ function parseClaudeJSON<T>(text: string): T {
       }
 
       if (lastValidEnd > 0) {
-        jsonStr = jsonStr.substring(0, lastValidEnd + 1);
+        const truncated = repaired.substring(0, lastValidEnd + 1);
         try {
-          return JSON.parse(jsonStr);
+          return JSON.parse(truncated);
         } catch (e3) {
-          // Last resort: log and throw
           console.error("[parseClaudeJSON] All repair attempts failed");
-          console.error("[parseClaudeJSON] JSON snippet:", jsonStr.substring(0, 500));
+          console.error("[parseClaudeJSON] Original (first 1000 chars):", jsonStr.substring(0, 1000));
           throw new Error(`Failed to parse Claude JSON: ${e3}`);
         }
       }
 
+      console.error("[parseClaudeJSON] Could not find valid JSON structure");
+      console.error("[parseClaudeJSON] Repaired (first 1000 chars):", repaired.substring(0, 1000));
       throw new Error(`Failed to parse Claude JSON: ${e2}`);
     }
   }
