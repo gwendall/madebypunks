@@ -27,8 +27,8 @@ interface ProjectOGImageProps {
 }
 
 function getPunkImageUrl(punkId: number) {
-  // Always use size=24, CSS pixelated rendering will scale it up
-  return `https://punks.art/api/punks/${punkId}?format=png&size=24&background=v2`;
+  // Use size=240 for OG images since Satori doesn't support image-rendering: pixelated
+  return `https://punks.art/api/punks/${punkId}?format=png&size=240&background=v2`;
 }
 
 export function generateNotFoundImage(options: OGImageOptions): ImageResponse {
