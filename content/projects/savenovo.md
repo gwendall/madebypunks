@@ -1,7 +1,6 @@
 ---
-thumbnail: /projects/savenovo.png
 name: SaveNovo
-description: A community initiative that helped coordinate efforts to recover CryptoNovo's stolen punk #3706 after he was scammed in January 2023.
+description: A successful community initiative that helped CryptoNovo recover his stolen punk #3706 through the NovoPixels collection, raising funds to buy back his iconic punk.
 url: https://github.com/gwendall/savenovo
 launchDate: 2023-01-04
 tags:
@@ -11,10 +10,11 @@ creators:
   - 2113
   - 7878
   - 8274
+thumbnail: /projects/savenovo.png
 ---
 
-On January 4th 2023, CryptoNovo got scammed and lost most of his NFTs, including his iconic CryptoPunk #3706.
+On January 4th 2023, CryptoNovo was scammed and lost most of his NFTs, including his iconic CryptoPunk #3706. The community rallied together to create SaveNovo, coordinating different initiatives to help novo recover the punk.
 
-This website was set up to coordinate the different initiatives made to help novo recover the punk back. It contained the savenovo.com code and the novopixels.com collection code.
+The project included the NovoPixels collection - 576 tokens representing each pixel of punk #3706, priced at 0.14 ETH each to raise the 80 ETH needed for recovery. With no royalties, 100% of proceeds went directly to buying back Novo's punk.
 
-The NovoPixels initiative was dedicated to help Novo recover his lost punk, and acted as a reminder to be safe out here. The collection was made of 576 tokens, one for each pixel of punk #3706. Each token was worth 0.14 ETH, which would have made 80 ETH if minted completely (the price to get #3706 back). There were no royalties, with 100% of the proceeds sent to a recovery wallet set for buying Novo's punk back.
+This initiative represents the best of the CryptoPunks community - coming together to help a fellow punk holder in need. The mission was ultimately successful, and Novo recovered his beloved punk #3706.
