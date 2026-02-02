@@ -1,7 +1,7 @@
 ---
 name: SaveNovo
 description: A successful community initiative that helped CryptoNovo recover his stolen punk #3706 through the NovoPixels collection, raising funds to buy back his iconic punk.
-url: https://github.com/gwendall/savenovo
+url: https://savenovo-punk-cam.vercel.app/
 launchDate: 2023-01-04
 tags:
   - Tool
