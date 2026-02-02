@@ -4,6 +4,7 @@ import { SITE_NAME } from "@/lib/constants";
 import { Button } from "./Button";
 import { SearchOverlay } from "./SearchOverlay";
 import { getSearchData } from "@/data/punks";
+import { AuthButton } from "./auth";
 
 export function Header() {
   const searchItems = getSearchData();
@@ -26,12 +27,9 @@ export function Header() {
           >
             <HiUsers className="w-5 h-5" />
           </Link>
-          <Button href="/add" variant="primary" size="sm" className="!hidden sm:!inline-flex ml-2">
-            + Join
-          </Button>
-          <Button href="/add" variant="primary" size="sm" className="sm:!hidden w-9 h-9 p-0 justify-center ml-2">
-            +
-          </Button>
+          <div className="ml-2">
+            <AuthButton />
+          </div>
         </nav>
       </div>
     </header>

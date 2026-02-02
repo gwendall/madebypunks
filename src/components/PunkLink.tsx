@@ -10,6 +10,8 @@ interface PunkLinkProps {
   variant?: "link" | "inline" | "ghost" | "subtle" | "light";
   onClick?: (e: React.MouseEvent) => void;
   className?: string;
+  /** Render as span instead of link (use when inside another link to avoid nested <a> tags) */
+  asSpan?: boolean;
 }
 
 const sizeConfig = {
@@ -55,6 +57,7 @@ export function PunkLink({
   variant = "link",
   onClick,
   className = "",
+  asSpan = false,
 }: PunkLinkProps) {
   const sizeConf = sizeConfig[size];
   const variantStyles = variantConfig[variant];
@@ -70,17 +73,42 @@ export function PunkLink({
   const hasFixedHeight = !("noFixedHeight" in variantStyles && variantStyles.noFixedHeight);
   const isLinkVariant = variant === "link";
 
-  return (
-    <Link
-      href={`/${punkId}`}
-      onClick={onClick ? handleClick : undefined}
-      className={`group inline-flex whitespace-nowrap transition-colors ${variantStyles.container} ${className} ${isLinkVariant ? "punk-link" : ""}`}
-      style={hasFixedHeight ? { height: sizeConf.height } : undefined}
-    >
+  const containerClassName = `group inline-flex whitespace-nowrap transition-colors ${variantStyles.container} ${className} ${isLinkVariant ? "punk-link" : ""}`;
+  const containerStyle = hasFixedHeight ? { height: sizeConf.height } : undefined;
+
+  const content = (
+    <>
       <PunkAvatar punkId={punkId} size={sizeConf.avatar} className="border-0! shrink-0" />
       <span className={`${"padding" in variantStyles ? variantStyles.padding : sizeConf.padding} ${variantStyles.text}`}>
         {name || `#${punkId}`}
       </span>
+    </>
+  );
+
+  // Render as span when inside another link (to avoid nested <a> tags)
+  if (asSpan) {
+    return (
+      <span
+        role="button"
+        tabIndex={0}
+        onClick={handleClick}
+        onKeyDown={(e) => e.key === 'Enter' && handleClick(e as unknown as React.MouseEvent)}
+        className={`${containerClassName} cursor-pointer`}
+        style={containerStyle}
+      >
+        {content}
+      </span>
+    );
+  }
+
+  return (
+    <Link
+      href={`/${punkId}`}
+      onClick={onClick ? handleClick : undefined}
+      className={containerClassName}
+      style={containerStyle}
+    >
+      {content}
     </Link>
   );
 }

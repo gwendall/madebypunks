@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Silkscreen } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL, SITE_NAME, SITE_TAGLINE, SITE_DESCRIPTION } from "@/lib/constants";
+import { Web3Provider } from "@/components/providers/Web3Provider";
+import { getServerAuthState } from "@/lib/auth/getServerAuthState";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -76,17 +78,22 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Get auth state from cookies to avoid flickering on page load
+  const initialAuthState = await getServerAuthState();
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${silkscreen.variable} antialiased`}
       >
-        {children}
+        <Web3Provider initialAuthState={initialAuthState}>
+          {children}
+        </Web3Provider>
         <Analytics />
       </body>
     </html>
