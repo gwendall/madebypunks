@@ -13,8 +13,6 @@ This file provides context about the madebypunks project for AI assistants.
 - **Tailwind CSS v4**
 - **gray-matter** for YAML frontmatter parsing
 - **react-markdown** for content rendering
-- **Octokit** + GitHub App for PR automation
-- **Anthropic Claude** for AI moderation (PunkMod)
 
 ## Project Structure
 
@@ -27,7 +25,6 @@ src/
 ├── app/                   # Next.js pages & API routes
 │   ├── [id]/              # Dynamic punk profile pages
 │   ├── p/[slug]/          # Dynamic project pages
-│   ├── api/mod/           # PunkMod AI endpoints
 │   └── ...
 ├── components/            # React components
 ├── data/punks.ts          # Build-time content loader
@@ -72,7 +69,6 @@ Detailed markdown description...
 2. **Static generation**: Pages pre-rendered using `generateStaticParams()`
 3. **No database**: Content stored as markdown in git
 4. **PR-based contributions**: Users submit via pull requests
-5. **AI moderation**: PunkMod reviews PRs for format, links, spam
 
 ## Commands
 
@@ -91,17 +87,6 @@ pnpm lint     # Run ESLint
 | `/p/[slug]` | Project page (e.g., /p/punkcam) |
 | `/who` | Directory of all punks |
 | `/add` | Submission instructions |
-| `/api/mod` | PunkMod review endpoint |
-
-## Environment Variables
-
-```
-ANTHROPIC_API_KEY=sk-ant-...
-GITHUB_APP_ID=...
-GITHUB_APP_INSTALLATION_ID=...
-GITHUB_APP_PRIVATE_KEY=...
-GITHUB_WEBHOOK_SECRET=...
-```
 
 ## Design System
 
