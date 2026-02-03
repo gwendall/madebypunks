@@ -69,6 +69,7 @@ export function ProjectListItem({ project, collaborators, size = "compact" }: Pr
                 name={collab.name}
                 size="xs"
                 variant="subtle"
+                asSpan
                 onClick={() => router.push(`/${collab.id}`)}
               />
             ))}

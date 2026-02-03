@@ -21,7 +21,7 @@ export function PunkSection({ punks, projects, isFirst = false }: PunkSectionPro
               <div key={punk.id} className="flex items-center">
                 <Link
                   href={`/${punk.id}`}
-                  className="group flex items-center gap-2 hover:opacity-80 transition-opacity"
+                  className="group flex items-center gap-2"
                 >
                   <PunkAvatar punkId={punk.id} size={40} />
                   <div className="flex flex-col">
