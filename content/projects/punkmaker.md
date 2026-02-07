@@ -33,4 +33,4 @@ PunkMaker is an interactive character creator that lets you remix and customize 
 - Neck accessories
 - And more...
 
-Remix all the punks!
+Mix and match traits from all 10,000 CryptoPunks.
